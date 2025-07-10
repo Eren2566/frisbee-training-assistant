@@ -1,0 +1,128 @@
+<!--pages/deploy-check/deploy-check.wxml-->
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">🚀 部署状态检查</text>
+    <text class="subtitle">验证小程序部署是否成功</text>
+  </view>
+
+  <!-- 整体状态 -->
+  <view class="card status-card">
+    <view class="status-indicator {{overallStatus}}">
+      <text class="status-icon">
+        {{overallStatus === 'checking' ? '⏳' : overallStatus === 'success' ? '✅' : overallStatus === 'warning' ? '⚠️' : '❌'}}
+      </text>
+      <text class="status-text">
+        {{overallStatus === 'checking' ? '检查中...' : overallStatus === 'success' ? '部署成功' : overallStatus === 'warning' ? '部分问题' : '部署失败'}}
+      </text>
+    </view>
+    
+    <!-- 进度条 -->
+    <view class="progress-bar" wx:if="{{isChecking}}">
+      <view class="progress-fill" style="width: {{checkProgress}}%"></view>
+    </view>
+    
+    <!-- 进度文本 -->
+    <text class="progress-text" wx:if="{{isChecking}}">{{checkProgress}}%</text>
+  </view>
+
+  <!-- 检查结果列表 -->
+  <view class="card results-card">
+    <text class="card-title">检查结果</text>
+    
+    <view class="check-list">
+      <view class="check-item" 
+            wx:for="{{checkResults}}" 
+            wx:key="name"
+            bindtap="onViewDetails"
+            data-index="{{index}}">
+        
+        <view class="check-header">
+          <view class="check-status {{item.status}}">
+            <text class="status-icon">
+              {{item.status === 'success' ? '✅' : item.status === 'warning' ? '⚠️' : '❌'}}
+            </text>
+          </view>
+          
+          <view class="check-info">
+            <text class="check-name">{{item.name}}</text>
+            <text class="check-message">{{item.message}}</text>
+          </view>
+          
+          <view class="check-arrow" wx:if="{{item.details}}">
+            <text>→</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{checkResults.length === 0 && !isChecking}}">
+      <text class="empty-text">暂无检查结果</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="btn-primary" bindtap="onRetryCheck" disabled="{{isChecking}}">
+      {{isChecking ? '检查中...' : '重新检查'}}
+    </button>
+    
+    <button class="btn-secondary" bindtap="onGetHelp">
+      获取帮助
+    </button>
+  </view>
+
+  <!-- 部署建议 -->
+  <view class="card tips-card" wx:if="{{overallStatus !== 'checking'}}">
+    <text class="card-title">💡 部署建议</text>
+    
+    <view class="tips-list" wx:if="{{overallStatus === 'success'}}">
+      <text class="tip-item">🎉 恭喜！所有检查都通过了</text>
+      <text class="tip-item">📱 现在可以邀请队员使用小程序</text>
+      <text class="tip-item">📊 建议定期查看使用统计和反馈</text>
+      <text class="tip-item">🔄 可以考虑添加测试数据进行功能验证</text>
+    </view>
+    
+    <view class="tips-list" wx:elif="{{overallStatus === 'warning'}}">
+      <text class="tip-item">⚠️ 部分功能可能存在问题</text>
+      <text class="tip-item">🔍 请检查失败项目的具体错误信息</text>
+      <text class="tip-item">📖 参考 QUICK_DEPLOY.md 进行排查</text>
+      <text class="tip-item">🛠️ 修复问题后重新检查</text>
+    </view>
+    
+    <view class="tips-list" wx:else>
+      <text class="tip-item">❌ 部署存在严重问题</text>
+      <text class="tip-item">📋 请按照 QUICK_DEPLOY.md 重新部署</text>
+      <text class="tip-item">🔧 检查云开发环境和配置文件</text>
+      <text class="tip-item">📞 如需帮助请查看技术文档</text>
+    </view>
+  </view>
+
+  <!-- 快速链接 -->
+  <view class="card links-card">
+    <text class="card-title">📚 相关文档</text>
+    
+    <view class="link-list">
+      <view class="link-item">
+        <text class="link-icon">🚀</text>
+        <text class="link-text">QUICK_DEPLOY.md - 快速部署指南</text>
+      </view>
+      
+      <view class="link-item">
+        <text class="link-icon">📖</text>
+        <text class="link-text">DEPLOYMENT.md - 详细部署文档</text>
+      </view>
+      
+      <view class="link-item">
+        <text class="link-icon">🔧</text>
+        <text class="link-text">test-data.json - 测试数据示例</text>
+      </view>
+      
+      <view class="link-item">
+        <text class="link-icon">🛡️</text>
+        <text class="link-text">database-permissions.json - 权限配置</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,143 @@
+/* pages/admin/create-event/create-event.wxss */
+.page-header {
+  text-align: center;
+  padding: 40rpx 20rpx;
+  background: linear-gradient(135deg, #1AAD19 0%, #4CAF50 100%);
+  color: white;
+  margin-bottom: 30rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+}
+
+.page-desc {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.form-section {
+  margin-bottom: 20rpx;
+}
+
+.form-item {
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 25rpx 20rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+.form-input:focus {
+  border-color: #1AAD19;
+  background-color: white;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 25rpx 20rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  min-height: 200rpx;
+  box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+.form-textarea:focus {
+  border-color: #1AAD19;
+  background-color: white;
+}
+
+.input-hint {
+  position: absolute;
+  right: 15rpx;
+  bottom: 15rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.datetime-picker {
+  display: flex;
+  gap: 20rpx;
+}
+
+.picker-item {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 20rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 10rpx;
+  background-color: #fafafa;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.form-actions {
+  display: flex;
+  gap: 20rpx;
+  margin: 40rpx 20rpx;
+}
+
+.reset-btn, .submit-btn {
+  flex: 1;
+  padding: 25rpx;
+  font-size: 32rpx;
+  border-radius: 10rpx;
+}
+
+.tips-card {
+  margin: 40rpx 20rpx 20rpx;
+  padding: 30rpx;
+  background-color: #f8f9fa;
+  border-radius: 15rpx;
+  border-left: 6rpx solid #1AAD19;
+}
+
+.tips-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.tip-item {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}

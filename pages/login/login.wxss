@@ -1,0 +1,95 @@
+/* pages/login/login.wxss */
+.login-header {
+  text-align: center;
+  padding: 100rpx 0 60rpx;
+}
+
+.logo {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.app-name {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.app-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.login-card {
+  margin: 40rpx 20rpx;
+  text-align: center;
+}
+
+.login-title {
+  margin-bottom: 20rpx;
+}
+
+.login-title text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.login-desc {
+  margin-bottom: 60rpx;
+}
+
+.login-desc text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.login-buttons {
+  margin-bottom: 60rpx;
+}
+
+.login-btn {
+  margin-bottom: 20rpx;
+  font-size: 32rpx;
+  padding: 25rpx;
+}
+
+.quick-login-btn {
+  font-size: 28rpx;
+  padding: 20rpx;
+}
+
+.feature-list {
+  text-align: left;
+  padding: 0 40rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.feature-icon {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+  width: 40rpx;
+}
+
+.feature-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.login-footer {
+  text-align: center;
+  padding: 60rpx 0 40rpx;
+}
+
+.footer-text {
+  font-size: 24rpx;
+  color: #999;
+}

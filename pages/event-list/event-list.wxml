@@ -1,0 +1,68 @@
+<!--pages/event-list/event-list.wxml-->
+<view class="page">
+  <!-- 头部操作区 -->
+  <view class="header-actions" wx:if="{{isAdmin}}">
+    <button class="btn-primary create-btn" bindtap="goToCreateEvent">
+      <text class="btn-icon">➕</text>
+      <text>创建训练</text>
+    </button>
+  </view>
+
+  <!-- 训练列表 -->
+  <view class="event-list" wx:if="{{!isLoading}}">
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{eventList.length === 0}}">
+      <view class="empty-icon">📅</view>
+      <text class="empty-text">暂无训练安排</text>
+      <button class="btn-secondary" wx:if="{{isAdmin}}" bindtap="goToCreateEvent">
+        创建第一个训练
+      </button>
+    </view>
+
+    <!-- 训练卡片列表 -->
+    <view class="event-item card" 
+          wx:for="{{eventList}}" 
+          wx:key="_id"
+          bindtap="goToEventDetail"
+          data-id="{{item._id}}">
+      
+      <!-- 训练标题和状态 -->
+      <view class="event-header">
+        <text class="event-title">{{item.title}}</text>
+        <view class="event-status {{item.status}}">
+          <text>{{item.status === 'registering' ? '报名中' : '已结束'}}</text>
+        </view>
+      </view>
+
+      <!-- 训练信息 -->
+      <view class="event-info">
+        <view class="info-item">
+          <text class="info-icon">🕐</text>
+          <text class="info-text">{{item.eventTime}}</text>
+        </view>
+        
+        <view class="info-item">
+          <text class="info-icon">📍</text>
+          <text class="info-text">{{item.location}}</text>
+        </view>
+      </view>
+
+      <!-- 训练内容预览 -->
+      <view class="event-content" wx:if="{{item.content}}">
+        <text class="content-text">{{item.content}}</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="event-actions">
+        <text class="action-hint">点击查看详情</text>
+        <text class="action-arrow">→</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <view class="loading-icon">⏳</view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

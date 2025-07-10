@@ -1,0 +1,138 @@
+<!--pages/event-detail/event-detail.wxml-->
+<view class="page">
+  <!-- 训练详情卡片 -->
+  <view class="card event-detail-card" wx:if="{{eventDetail}}">
+    <!-- 训练标题和状态 -->
+    <view class="event-header">
+      <text class="event-title">{{eventDetail.title}}</text>
+      <view class="event-status {{eventDetail.status}}">
+        <text>{{eventDetail.status === 'registering' ? '报名中' : '已结束'}}</text>
+      </view>
+    </view>
+
+    <!-- 训练基本信息 -->
+    <view class="event-info">
+      <view class="info-item">
+        <text class="info-icon">🕐</text>
+        <text class="info-label">训练时间</text>
+        <text class="info-value">{{eventDetail.eventTime}}</text>
+      </view>
+      
+      <view class="info-item">
+        <text class="info-icon">📍</text>
+        <text class="info-label">训练地点</text>
+        <text class="info-value">{{eventDetail.location}}</text>
+      </view>
+    </view>
+
+    <!-- 训练内容 -->
+    <view class="event-content" wx:if="{{eventDetail.content}}">
+      <text class="content-title">训练内容</text>
+      <text class="content-text">{{eventDetail.content}}</text>
+    </view>
+
+    <!-- 备注信息 -->
+    <view class="event-notes" wx:if="{{eventDetail.notes}}">
+      <text class="notes-title">备注</text>
+      <text class="notes-text">{{eventDetail.notes}}</text>
+    </view>
+  </view>
+
+  <!-- 用户操作区域 -->
+  <view class="card user-actions" wx:if="{{!isAdmin && eventDetail && eventDetail.status === 'registering'}}">
+    <text class="section-title">我的状态</text>
+    
+    <!-- 用户当前状态显示 -->
+    <view class="current-status" wx:if="{{userStatus}}">
+      <text class="status-text">当前状态：</text>
+      <view class="status-badge {{userStatus.status}}">
+        <text>{{userStatus.status === 'signed_up' ? '已报名' : userStatus.status === 'leave_requested' ? '已请假' : '未知'}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons" wx:if="{{!userStatus}}">
+      <button 
+        class="btn-primary register-btn" 
+        bindtap="registerForEvent"
+        data-status="signed_up"
+        disabled="{{isRegistering}}"
+      >
+        {{isRegistering ? '处理中...' : '我要报名'}}
+      </button>
+      
+      <button 
+        class="btn-secondary leave-btn" 
+        bindtap="registerForEvent"
+        data-status="leave_requested"
+        disabled="{{isRegistering}}"
+      >
+        {{isRegistering ? '处理中...' : '我要请假'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 管理员报名管理区域 -->
+  <view class="card admin-panel" wx:if="{{isAdmin}}">
+    <text class="section-title">报名管理</text>
+    
+    <!-- 报名统计 -->
+    <view class="registration-stats">
+      <view class="stat-item">
+        <text class="stat-number">{{registrationStats.total}}</text>
+        <text class="stat-label">总报名</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{registrationStats.signedUp}}</text>
+        <text class="stat-label">已报名</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{registrationStats.leaveRequested}}</text>
+        <text class="stat-label">已请假</text>
+      </view>
+    </view>
+
+    <!-- 报名列表 -->
+    <view class="registration-list" wx:if="{{registrationList.length > 0}}">
+      <view class="list-item" 
+            wx:for="{{registrationList}}" 
+            wx:key="_id">
+        
+        <view class="member-info">
+          <image class="member-avatar" src="{{item.userInfo.avatarUrl}}" mode="aspectFill"></image>
+          <view class="member-details">
+            <text class="member-name">{{item.userInfo.nickName}}</text>
+            <view class="member-status {{item.status}}">
+              <text>{{item.status === 'signed_up' ? '已报名' : item.status === 'leave_requested' ? '已请假' : item.status === 'present' ? '已出勤' : item.status === 'absent' ? '缺勤' : '未知'}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 管理员操作按钮 -->
+        <view class="admin-actions" wx:if="{{item.status === 'signed_up'}}">
+          <button 
+            class="btn-mini btn-success" 
+            bindtap="updateAttendance"
+            data-id="{{item._id}}"
+            data-status="present"
+          >
+            出勤
+          </button>
+          <button 
+            class="btn-mini btn-danger" 
+            bindtap="updateAttendance"
+            data-id="{{item._id}}"
+            data-status="absent"
+          >
+            缺勤
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-registration" wx:else>
+      <text class="empty-text">暂无报名记录</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,28 @@
+<!--components/loading/loading.wxml-->
+<view class="loading-container {{show ? 'show' : 'hide'}}" wx:if="{{show}}">
+  <!-- 遮罩层 -->
+  <view class="loading-mask" wx:if="{{mask}}" bindtap="onMaskTap"></view>
+  
+  <!-- 加载内容 -->
+  <view class="loading-content {{size}}">
+    <!-- 旋转加载器 -->
+    <view class="loading-spinner {{type}}" wx:if="{{type === 'spinner'}}">
+      <view class="spinner-circle"></view>
+    </view>
+    
+    <!-- 点状加载器 -->
+    <view class="loading-dots {{type}}" wx:elif="{{type === 'dots'}}">
+      <view class="dot dot1"></view>
+      <view class="dot dot2"></view>
+      <view class="dot dot3"></view>
+    </view>
+    
+    <!-- 脉冲加载器 -->
+    <view class="loading-pulse {{type}}" wx:elif="{{type === 'pulse'}}">
+      <view class="pulse-circle"></view>
+    </view>
+    
+    <!-- 加载文本 -->
+    <text class="loading-text" wx:if="{{text}}">{{text}}</text>
+  </view>
+</view>

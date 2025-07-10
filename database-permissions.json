@@ -1,0 +1,76 @@
+{
+  "description": "数据库权限配置说明",
+  "note": "请在云开发控制台的数据库中为每个集合设置相应的权限规则",
+  
+  "Users": {
+    "collection_name": "Users",
+    "permission_rules": {
+      "read": {
+        "rule": "auth.openid != null",
+        "description": "所有已登录用户可读"
+      },
+      "write": {
+        "rule": "auth.openid == resource._openid",
+        "description": "仅创建者可写（用户只能修改自己的信息）"
+      }
+    },
+    "suggested_rule": "仅创建者可读写",
+    "reason": "用户信息涉及隐私，应该限制访问权限"
+  },
+
+  "Events": {
+    "collection_name": "Events", 
+    "permission_rules": {
+      "read": {
+        "rule": "auth.openid != null",
+        "description": "所有已登录用户可读"
+      },
+      "write": {
+        "rule": "get(`database.Users.${auth.openid}`).role == 'admin'",
+        "description": "仅管理员可写"
+      }
+    },
+    "suggested_rule": "所有用户可读，仅管理员可写",
+    "reason": "训练信息需要所有队员查看，但只有管理员能创建和修改"
+  },
+
+  "Registrations": {
+    "collection_name": "Registrations",
+    "permission_rules": {
+      "read": {
+        "rule": "auth.openid != null",
+        "description": "所有已登录用户可读"
+      },
+      "write": {
+        "rule": "auth.openid == resource.userId || get(`database.Users.${auth.openid}`).role == 'admin'",
+        "description": "创建者和管理员可写"
+      }
+    },
+    "suggested_rule": "所有用户可读，仅创建者和管理员可写",
+    "reason": "报名信息需要透明，用户可以修改自己的报名，管理员可以更新出勤状态"
+  },
+
+  "setup_instructions": [
+    "1. 打开微信开发者工具，进入云开发控制台",
+    "2. 点击左侧菜单的'数据库'",
+    "3. 为每个集合点击'设置'按钮",
+    "4. 在'权限设置'中选择'自定义安全规则'",
+    "5. 根据上述规则配置读写权限",
+    "6. 保存设置"
+  ],
+
+  "alternative_simple_setup": {
+    "description": "如果自定义规则配置复杂，可以使用简化权限设置",
+    "Users": "仅创建者可读写",
+    "Events": "所有用户可读，仅创建者可写", 
+    "Registrations": "所有用户可读，仅创建者可写",
+    "note": "这种设置下需要在云函数中进行额外的权限验证"
+  },
+
+  "security_considerations": [
+    "云函数中已经包含了权限验证逻辑",
+    "数据库权限是第二层保护",
+    "建议定期检查和更新权限设置",
+    "测试时可以先使用宽松权限，上线前收紧权限"
+  ]
+}

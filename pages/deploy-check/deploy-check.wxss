@@ -1,0 +1,224 @@
+/* pages/deploy-check/deploy-check.wxss */
+.header {
+  text-align: center;
+  padding: 40rpx 20rpx;
+  background: linear-gradient(135deg, #1AAD19 0%, #4CAF50 100%);
+  color: white;
+  margin-bottom: 30rpx;
+}
+
+.title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+}
+
+.subtitle {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.status-card {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.status-indicator .status-icon {
+  font-size: 60rpx;
+  margin-right: 20rpx;
+}
+
+.status-indicator .status-text {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.status-indicator.checking .status-text {
+  color: #1AAD19;
+}
+
+.status-indicator.success .status-text {
+  color: #1AAD19;
+}
+
+.status-indicator.warning .status-text {
+  color: #f57c00;
+}
+
+.status-indicator.error .status-text {
+  color: #e64340;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8rpx;
+  background-color: #f0f0f0;
+  border-radius: 4rpx;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #1AAD19;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.results-card {
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.check-list {
+  margin-top: 20rpx;
+}
+
+.check-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.check-item:last-child {
+  border-bottom: none;
+}
+
+.check-header {
+  display: flex;
+  align-items: center;
+}
+
+.check-status {
+  margin-right: 20rpx;
+}
+
+.check-status .status-icon {
+  font-size: 32rpx;
+}
+
+.check-info {
+  flex: 1;
+}
+
+.check-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.check-message {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.check-arrow {
+  margin-left: 20rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.actions {
+  display: flex;
+  gap: 20rpx;
+  margin: 30rpx 20rpx;
+}
+
+.actions button {
+  flex: 1;
+  padding: 25rpx;
+  font-size: 32rpx;
+  border-radius: 10rpx;
+}
+
+.btn-primary {
+  background-color: #1AAD19;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #1AAD19;
+  border: 2rpx solid #1AAD19;
+}
+
+.tips-card, .links-card {
+  margin-bottom: 20rpx;
+}
+
+.tips-list, .link-list {
+  margin-top: 20rpx;
+}
+
+.tip-item {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12rpx;
+  padding-left: 30rpx;
+  position: relative;
+}
+
+.tip-item::before {
+  content: "•";
+  position: absolute;
+  left: 10rpx;
+  color: #1AAD19;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.link-item:last-child {
+  border-bottom: none;
+}
+
+.link-icon {
+  font-size: 28rpx;
+  margin-right: 15rpx;
+  width: 40rpx;
+}
+
+.link-text {
+  font-size: 26rpx;
+  color: #333;
+  flex: 1;
+}

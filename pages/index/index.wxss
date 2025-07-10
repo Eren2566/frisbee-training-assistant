@@ -1,0 +1,122 @@
+/* pages/index/index.wxss */
+.header {
+  text-align: center;
+  padding: 60rpx 0 40rpx;
+  background: linear-gradient(135deg, #1AAD19 0%, #4CAF50 100%);
+  color: white;
+  margin-bottom: 30rpx;
+}
+
+.welcome-text .title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.welcome-text .subtitle {
+  display: block;
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  margin-right: 30rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.role {
+  display: block;
+  font-size: 28rpx;
+  color: #1AAD19;
+  background-color: #f0f9f0;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+.login-prompt {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.prompt-text {
+  display: block;
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+.function-nav {
+  margin: 30rpx 0;
+}
+
+.nav-item {
+  background-color: white;
+  border-radius: 15rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.nav-icon {
+  font-size: 60rpx;
+  margin-right: 30rpx;
+}
+
+.nav-text {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.nav-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.quick-actions {
+  margin-top: 40rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-buttons button {
+  flex: 1;
+}

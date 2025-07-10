@@ -1,0 +1,55 @@
+/* components/empty-state/empty-state.wxss */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.8;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.empty-description {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 40rpx;
+  display: block;
+  max-width: 500rpx;
+}
+
+.empty-button {
+  padding: 20rpx 40rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.empty-button.btn-primary {
+  background-color: #1AAD19;
+  color: white;
+}
+
+.empty-button.btn-secondary {
+  background-color: transparent;
+  color: #1AAD19;
+  border: 2rpx solid #1AAD19;
+}
+
+.empty-button.btn-default {
+  background-color: #f5f5f5;
+  color: #333;
+}

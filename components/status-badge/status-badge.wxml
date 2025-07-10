@@ -1,0 +1,4 @@
+<!--components/status-badge/status-badge.wxml-->
+<view class="status-badge {{currentStatusInfo.class}} {{size}}" wx:if="{{status}}">
+  <text class="badge-text">{{currentStatusInfo.text}}</text>
+</view>

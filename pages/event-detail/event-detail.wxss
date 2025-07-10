@@ -1,0 +1,272 @@
+/* pages/event-detail/event-detail.wxss */
+.event-detail-card {
+  margin-bottom: 20rpx;
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+}
+
+.event-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.event-status {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.event-status.registering {
+  background-color: #e8f5e8;
+  color: #1AAD19;
+}
+
+.event-status.finished {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.event-info {
+  margin-bottom: 30rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.info-icon {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+  width: 40rpx;
+  margin-top: 4rpx;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #666;
+  width: 120rpx;
+  margin-right: 20rpx;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.event-content, .event-notes {
+  margin-bottom: 30rpx;
+}
+
+.content-title, .notes-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.content-text, .notes-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.user-actions {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.current-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.status-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 15rpx;
+}
+
+.status-badge {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.status-badge.signed_up {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.leave_requested {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.present {
+  background-color: #e8f5e8;
+  color: #1AAD19;
+}
+
+.status-badge.absent {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.register-btn, .leave-btn {
+  flex: 1;
+}
+
+.admin-panel {
+  margin-bottom: 20rpx;
+}
+
+.registration-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+  padding: 20rpx 0;
+  background-color: #f8f8f8;
+  border-radius: 10rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1AAD19;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.registration-list {
+  margin-top: 20rpx;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.member-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  margin-right: 20rpx;
+}
+
+.member-details {
+  flex: 1;
+}
+
+.member-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.member-status {
+  padding: 4rpx 12rpx;
+  border-radius: 15rpx;
+  font-size: 22rpx;
+  display: inline-block;
+}
+
+.member-status.signed_up {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.member-status.leave_requested {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.member-status.present {
+  background-color: #e8f5e8;
+  color: #1AAD19;
+}
+
+.member-status.absent {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.btn-mini {
+  padding: 12rpx 20rpx;
+  font-size: 24rpx;
+  border-radius: 20rpx;
+  min-width: 80rpx;
+}
+
+.btn-success {
+  background-color: #1AAD19;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #e64340;
+  color: white;
+}
+
+.empty-registration {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #666;
+}

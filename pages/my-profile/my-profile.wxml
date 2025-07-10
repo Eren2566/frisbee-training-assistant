@@ -1,0 +1,96 @@
+<!--pages/my-profile/my-profile.wxml-->
+<view class="page">
+  <!-- 已登录状态 -->
+  <view wx:if="{{isLoggedIn}}">
+    <!-- 用户信息卡片 -->
+    <view class="card user-card">
+      <view class="user-info">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view class="user-details">
+          <text class="nickname">{{userInfo.nickName}}</text>
+          <view class="role-badge {{userInfo.role}}">
+            <text>{{userInfo.role === 'admin' ? '队长' : '队员'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 统计数据 -->
+    <view class="card stats-card">
+      <text class="card-title">出勤统计</text>
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{stats.totalEvents}}</text>
+          <text class="stat-label">参与训练</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.attendedEvents}}</text>
+          <text class="stat-label">实际出勤</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.attendanceRate}}%</text>
+          <text class="stat-label">出勤率</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的训练记录 -->
+    <view class="card">
+      <text class="card-title">我的训练记录</text>
+      
+      <!-- 加载状态 -->
+      <view class="loading-state" wx:if="{{isLoading}}">
+        <text class="loading-text">加载中...</text>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:elif="{{myRegistrations.length === 0}}">
+        <view class="empty-icon">📝</view>
+        <text class="empty-text">暂无训练记录</text>
+      </view>
+
+      <!-- 记录列表 -->
+      <view class="registration-list" wx:else>
+        <view class="registration-item" 
+              wx:for="{{myRegistrations}}" 
+              wx:key="_id"
+              bindtap="goToEventDetail"
+              data-event-id="{{item.eventId}}">
+          
+          <view class="registration-header">
+            <text class="event-title">{{item.eventInfo.title}}</text>
+            <view class="status-badge {{item.status}}">
+              <text>{{item.status === 'signed_up' ? '已报名' : item.status === 'leave_requested' ? '已请假' : item.status === 'present' ? '已出勤' : item.status === 'absent' ? '缺勤' : '未知'}}</text>
+            </view>
+          </view>
+
+          <view class="registration-info">
+            <view class="info-item">
+              <text class="info-icon">🕐</text>
+              <text class="info-text">{{item.eventInfo.eventTime}}</text>
+            </view>
+            <view class="info-item">
+              <text class="info-icon">📍</text>
+              <text class="info-text">{{item.eventInfo.location}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="btn-danger logout-btn" bindtap="logout">退出登录</button>
+    </view>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="login-prompt" wx:else>
+    <view class="prompt-content">
+      <view class="prompt-icon">👤</view>
+      <text class="prompt-title">请先登录</text>
+      <text class="prompt-desc">登录后可查看个人出勤记录</text>
+      <button class="btn-primary" bindtap="goToLogin">立即登录</button>
+    </view>
+  </view>
+</view>

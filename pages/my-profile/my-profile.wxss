@@ -1,0 +1,221 @@
+/* pages/my-profile/my-profile.wxss */
+.user-card {
+  margin-bottom: 20rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  margin-right: 30rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.role-badge {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  display: inline-block;
+}
+
+.role-badge.admin {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.role-badge.member {
+  background-color: #e8f5e8;
+  color: #1AAD19;
+}
+
+.stats-card {
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #1AAD19;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.registration-list {
+  margin-top: 20rpx;
+}
+
+.registration-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.registration-item:last-child {
+  border-bottom: none;
+}
+
+.registration-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15rpx;
+}
+
+.event-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.status-badge {
+  padding: 6rpx 12rpx;
+  border-radius: 15rpx;
+  font-size: 22rpx;
+}
+
+.status-badge.signed_up {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.leave_requested {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.present {
+  background-color: #e8f5e8;
+  color: #1AAD19;
+}
+
+.status-badge.absent {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.registration-info {
+  margin-left: 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.info-icon {
+  font-size: 24rpx;
+  margin-right: 12rpx;
+  width: 30rpx;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.actions {
+  margin-top: 40rpx;
+  padding: 0 20rpx;
+}
+
+.logout-btn {
+  width: 100%;
+}
+
+.login-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.prompt-content {
+  text-align: center;
+  padding: 40rpx;
+}
+
+.prompt-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.prompt-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.prompt-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
