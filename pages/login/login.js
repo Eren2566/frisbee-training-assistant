@@ -67,12 +67,20 @@ Page({
           app.globalData.isLoggedIn = true
           
           app.showSuccess('登录成功')
-          
-          // 跳转到首页
+
+          // 根据用户信息完善状态决定跳转路径
           setTimeout(() => {
-            wx.switchTab({
-              url: '/pages/index/index'
-            })
+            if (userData.isInfoCompleted) {
+              // 信息已完善，跳转到首页
+              wx.switchTab({
+                url: '/pages/index/index'
+              })
+            } else {
+              // 信息未完善，跳转到信息完善页面
+              wx.redirectTo({
+                url: '/pages/user-info/user-info'
+              })
+            }
           }, 1500)
         } else {
           app.showError(res.result.message || '登录失败')

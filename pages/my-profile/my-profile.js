@@ -160,5 +160,12 @@ Page({
     const minute = date.getMinutes()
     
     return `${month}月${day}日 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+  },
+
+  // 跳转到开发工具
+  goToDevTools() {
+    wx.navigateTo({
+      url: '/pages/dev-tools/dev-tools'
+    })
   }
 })

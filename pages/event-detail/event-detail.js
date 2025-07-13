@@ -16,6 +16,7 @@ Page({
       present: 0,
       absent: 0
     },
+    hasSignedUpUsers: false, // 是否有已报名用户
     isLoading: false,
     isRegistering: false
   },
@@ -65,10 +66,9 @@ Page({
 
     this.loadEventDetail()
     this.loadUserStatus()
-    
-    if (userInfo.role === 'admin') {
-      this.loadRegistrationList()
-    }
+
+    // 所有用户都加载报名列表以显示参训人员
+    this.loadRegistrationList()
   },
 
   // 加载训练详情
@@ -127,9 +127,11 @@ Page({
       success: (res) => {
         if (res.result.success) {
           const registrationList = res.result.data
+          const hasSignedUpUsers = registrationList.some(item => item.status === 'signed_up')
           this.setData({
             registrationList: registrationList,
-            registrationStats: this.calculateRegistrationStats(registrationList)
+            registrationStats: this.calculateRegistrationStats(registrationList),
+            hasSignedUpUsers: hasSignedUpUsers
           })
         }
       },

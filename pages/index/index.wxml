@@ -13,7 +13,7 @@
     <view class="user-info">
       <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
       <view class="user-details">
-        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="nickname">{{userInfo.discName || userInfo.nickName || '未知用户'}}</text>
         <text class="role">{{userInfo.role === 'admin' ? '队长' : '队员'}}</text>
       </view>
     </view>

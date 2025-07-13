@@ -38,6 +38,35 @@
     </view>
   </view>
 
+  <!-- 参训人员卡片 -->
+  <view class="card participants-card" wx:if="{{eventDetail}}">
+    <text class="section-title">参训人员</text>
+
+    <!-- 参训人员列表 -->
+    <view class="participants-list" wx:if="{{registrationList.length > 0}}">
+      <view class="participant-item"
+            wx:for="{{registrationList}}"
+            wx:key="_id"
+            wx:if="{{item.status === 'signed_up'}}">
+
+        <!-- 性别标识 -->
+        <view class="gender-badge {{item.userInfo.gender === '男' ? 'male' : 'female'}}">
+          <text>{{item.userInfo.gender || '未知'}}</text>
+        </view>
+
+        <!-- 盘名显示 -->
+        <view class="participant-name">
+          <text>{{item.userInfo.discName || item.userInfo.nickName || '未知用户'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 无参训人员提示 -->
+    <view class="empty-participants" wx:if="{{registrationList.length === 0 || !hasSignedUpUsers}}">
+      <text class="empty-text">暂无参训人员</text>
+    </view>
+  </view>
+
   <!-- 用户操作区域 -->
   <view class="card user-actions" wx:if="{{!isAdmin && eventDetail && eventDetail.status === 'registering'}}">
     <text class="section-title">我的状态</text>
@@ -101,7 +130,7 @@
         <view class="member-info">
           <image class="member-avatar" src="{{item.userInfo.avatarUrl}}" mode="aspectFill"></image>
           <view class="member-details">
-            <text class="member-name">{{item.userInfo.nickName}}</text>
+            <text class="member-name">{{item.userInfo.discName || item.userInfo.nickName || '未知用户'}}</text>
             <view class="member-status {{item.status}}">
               <text>{{item.status === 'signed_up' ? '已报名' : item.status === 'leave_requested' ? '已请假' : item.status === 'present' ? '已出勤' : item.status === 'absent' ? '缺勤' : '未知'}}</text>
             </view>

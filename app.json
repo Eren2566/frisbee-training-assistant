@@ -2,11 +2,13 @@
   "pages": [
     "pages/index/index",
     "pages/login/login",
+    "pages/user-info/user-info",
     "pages/event-list/event-list",
     "pages/event-detail/event-detail",
     "pages/admin/create-event/create-event",
     "pages/my-profile/my-profile",
-    "pages/deploy-check/deploy-check"
+    "pages/deploy-check/deploy-check",
+    "pages/dev-tools/dev-tools"
   ],
   "window": {
     "backgroundTextStyle": "light",

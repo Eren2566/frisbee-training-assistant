@@ -1,0 +1,92 @@
+<!--pages/dev-tools/dev-tools.wxml-->
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">开发工具</text>
+    <text class="page-desc">用户身份切换和测试数据管理</text>
+  </view>
+
+  <!-- 当前用户信息 -->
+  <view class="card current-user-card">
+    <text class="section-title">当前用户</text>
+    
+    <view class="current-user" wx:if="{{currentUser}}">
+      <image class="user-avatar" src="{{currentUser.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">{{currentUser.discName || currentUser.nickName || '未知用户'}}</text>
+        <text class="user-detail">{{currentUser.realName}} | {{currentUser.gender}} | {{currentUser.institute}}</text>
+        <view class="user-role {{currentUser.role}}">
+          <text>{{currentUser.role === 'admin' ? '队长' : '队员'}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="no-user" wx:else>
+      <text class="no-user-text">未登录</text>
+    </view>
+    
+    <view class="user-actions">
+      <button class="btn btn-secondary" bindtap="logout" wx:if="{{currentUser}}">退出登录</button>
+      <button class="btn btn-primary" bindtap="goHome">返回首页</button>
+    </view>
+  </view>
+
+  <!-- 测试用户管理 -->
+  <view class="card test-users-card">
+    <view class="section-header">
+      <text class="section-title">测试用户</text>
+      <button class="btn btn-primary btn-small" bindtap="createTestUsers">创建测试用户</button>
+    </view>
+    
+    <!-- 测试用户列表 -->
+    <view class="test-users-list" wx:if="{{testUsers.length > 0}}">
+      <view class="user-item" 
+            wx:for="{{testUsers}}" 
+            wx:key="_id"
+            bindtap="switchUser"
+            data-index="{{index}}">
+        
+        <view class="user-basic-info">
+          <view class="user-name-row">
+            <text class="disc-name">{{item.discName || item.nickName}}</text>
+            <view class="gender-badge {{item.gender === '男' ? 'male' : 'female'}}">
+              <text>{{item.gender}}</text>
+            </view>
+          </view>
+          <text class="real-name">{{item.realName}} | {{item.institute}}</text>
+          <view class="role-badge {{item.role}}">
+            <text>{{item.role === 'admin' ? '队长' : '队员'}}</text>
+          </view>
+        </view>
+        
+        <view class="switch-indicator">
+          <text class="current-indicator" wx:if="{{currentUser && currentUser._openid === item._openid}}">当前</text>
+          <text class="switch-text" wx:else>切换</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-users" wx:else>
+      <text class="empty-text">暂无测试用户</text>
+      <text class="empty-hint">点击上方按钮创建测试用户</text>
+    </view>
+    
+    <!-- 加载状态 -->
+    <view class="loading" wx:if="{{isLoading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+
+  <!-- 使用说明 -->
+  <view class="card usage-card">
+    <text class="section-title">使用说明</text>
+    <view class="usage-list">
+      <text class="usage-item">1. 点击"创建测试用户"生成多个不同身份的测试账号</text>
+      <text class="usage-item">2. 点击任意测试用户可切换到该用户身份</text>
+      <text class="usage-item">3. 切换后可测试不同角色的功能权限</text>
+      <text class="usage-item">4. 测试用户包含完整的个人信息（姓名、性别、研究所、盘名等）</text>
+      <text class="usage-item">5. 测试完成后可点击"退出登录"清除状态</text>
+    </view>
+  </view>
+</view>

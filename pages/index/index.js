@@ -1,5 +1,6 @@
 // pages/index/index.js
 const app = getApp()
+const { getUserDisplayName, getUserRoleText } = require('../../utils/userUtils.js')
 
 Page({
   data: {

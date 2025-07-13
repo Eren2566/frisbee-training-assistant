@@ -1,0 +1,107 @@
+<!--pages/user-info/user-info.wxml-->
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">完善个人信息</text>
+    <text class="page-desc">请填写以下信息以完成注册</text>
+  </view>
+
+  <!-- 信息表单 -->
+  <form bindsubmit="onSubmit">
+    <!-- 性别选择 -->
+    <view class="card form-section">
+      <view class="form-item">
+        <label class="form-label required">性别</label>
+        <picker 
+          class="form-picker" 
+          mode="selector" 
+          range="{{genderOptions}}" 
+          range-key="label"
+          value="{{formData.gender}}"
+          bindchange="onGenderChange"
+        >
+          <view class="picker-content {{formData.gender ? '' : 'placeholder'}}">
+            {{formData.gender || '请选择性别'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 研究所选择 -->
+    <view class="card form-section">
+      <view class="form-item">
+        <label class="form-label required">研究所</label>
+        <picker 
+          class="form-picker" 
+          mode="selector" 
+          range="{{instituteOptions}}" 
+          range-key="label"
+          value="{{formData.institute}}"
+          bindchange="onInstituteChange"
+        >
+          <view class="picker-content {{formData.institute ? '' : 'placeholder'}}">
+            {{formData.institute || '请选择研究所'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 真实姓名输入 -->
+    <view class="card form-section">
+      <view class="form-item">
+        <label class="form-label required">真实姓名</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="请输入您的真实姓名"
+          value="{{formData.realName}}"
+          bindinput="onRealNameInput"
+          maxlength="10"
+        />
+      </view>
+    </view>
+
+    <!-- 盘名输入 -->
+    <view class="card form-section">
+      <view class="form-item">
+        <label class="form-label required">盘名</label>
+        <input
+          class="form-input {{discNameError ? 'error' : ''}}"
+          type="text"
+          placeholder="请输入盘名"
+          value="{{formData.discName}}"
+          bindinput="onDiscNameInput"
+          maxlength="20"
+        />
+        <view class="input-hint">起一个好听好记好念的盘名吧~</view>
+        <view class="error-message" wx:if="{{discNameError}}">{{discNameError}}</view>
+      </view>
+    </view>
+
+    <!-- 联系方式输入 -->
+    <view class="card form-section">
+      <view class="form-item">
+        <label class="form-label required">联系方式</label>
+        <input 
+          class="form-input" 
+          type="text" 
+          placeholder="请输入手机号码或其他联系方式"
+          value="{{formData.contactInfo}}"
+          bindinput="onContactInfoInput"
+          maxlength="50"
+        />
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="form-actions">
+      <button 
+        class="btn btn-primary btn-block" 
+        form-type="submit"
+        disabled="{{isSubmitting}}"
+      >
+        {{isSubmitting ? '保存中...' : '完成注册'}}
+      </button>
+    </view>
+  </form>
+</view>
