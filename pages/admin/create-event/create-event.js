@@ -142,12 +142,20 @@ Page({
 
     app.showLoading('创建中...')
 
+    const requestData = {
+      action: 'create',
+      ...this.data.formData
+    }
+
+    // 如果是测试用户，传递测试用户的openid
+    const userInfo = wx.getStorageSync('userInfo')
+    if (userInfo && userInfo._openid && userInfo._openid.startsWith('test_')) {
+      requestData.testUserId = userInfo._openid
+    }
+
     wx.cloud.callFunction({
       name: 'event_service',
-      data: {
-        action: 'create',
-        ...this.data.formData
-      },
+      data: requestData,
       success: (res) => {
         console.log('创建训练成功:', res)
         

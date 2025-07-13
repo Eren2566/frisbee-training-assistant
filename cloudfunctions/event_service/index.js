@@ -38,8 +38,9 @@ exports.main = async (event, context) => {
 
 // 创建训练活动
 async function createEvent(event, wxContext) {
-  const { title, eventTime, location, content, notes } = event
-  const openid = wxContext.OPENID
+  const { title, eventTime, location, content, notes, testUserId } = event
+  // 如果传入了测试用户ID，使用测试用户ID；否则使用真实用户ID
+  const openid = testUserId || wxContext.OPENID
 
   try {
     // 验证用户权限
