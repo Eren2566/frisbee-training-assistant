@@ -97,12 +97,19 @@ Page({
 
   // 加载用户状态
   loadUserStatus() {
+    const requestData = {
+      action: 'getUserStatus',
+      eventId: this.data.eventId
+    }
+
+    // 如果是测试用户，传递测试用户的openid
+    if (this.data.userInfo && this.data.userInfo._openid && this.data.userInfo._openid.startsWith('test_')) {
+      requestData.testUserId = this.data.userInfo._openid
+    }
+
     wx.cloud.callFunction({
       name: 'registration_service',
-      data: {
-        action: 'getUserStatus',
-        eventId: this.data.eventId
-      },
+      data: requestData,
       success: (res) => {
         if (res.result.success) {
           this.setData({
@@ -161,20 +168,27 @@ Page({
   // 用户报名
   registerForEvent(e) {
     const status = e.currentTarget.dataset.status
-    
+
     if (this.data.isRegistering) return
 
     this.setData({
       isRegistering: true
     })
 
+    const requestData = {
+      action: 'register',
+      eventId: this.data.eventId,
+      status: status
+    }
+
+    // 如果是测试用户，传递测试用户的openid
+    if (this.data.userInfo && this.data.userInfo._openid && this.data.userInfo._openid.startsWith('test_')) {
+      requestData.testUserId = this.data.userInfo._openid
+    }
+
     wx.cloud.callFunction({
       name: 'registration_service',
-      data: {
-        action: 'register',
-        eventId: this.data.eventId,
-        status: status
-      },
+      data: requestData,
       success: (res) => {
         if (res.result.success) {
           app.showSuccess(res.result.message)

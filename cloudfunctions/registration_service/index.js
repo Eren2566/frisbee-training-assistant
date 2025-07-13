@@ -42,8 +42,9 @@ exports.main = async (event, context) => {
 
 // 用户报名/请假
 async function registerForEvent(event, wxContext) {
-  const { eventId, status } = event
-  const openid = wxContext.OPENID
+  const { eventId, status, testUserId } = event
+  // 如果传入了测试用户ID，使用测试用户ID；否则使用真实用户ID
+  const openid = testUserId || wxContext.OPENID
 
   try {
     // 检查是否已经报名
@@ -208,8 +209,9 @@ async function updateAttendance(event, wxContext) {
 
 // 获取用户在某个活动的状态
 async function getUserEventStatus(event, wxContext) {
-  const { eventId } = event
-  const openid = wxContext.OPENID
+  const { eventId, testUserId } = event
+  // 如果传入了测试用户ID，使用测试用户ID；否则使用真实用户ID
+  const openid = testUserId || wxContext.OPENID
 
   try {
     const result = await db.collection('Registrations').where({
