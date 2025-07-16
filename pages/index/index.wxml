@@ -5,6 +5,9 @@
     <view class="welcome-text">
       <text class="title">FlyMate</text>
       <text class="subtitle">Your Ultimate Frisbee Companion</text>
+      <view class="brand-tagline">
+        <text class="tagline-text">✨ Train Smart • Play Together • Fly High ✨</text>
+      </view>
     </view>
   </view>
 

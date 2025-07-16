@@ -20,8 +20,24 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+  background-size: 60rpx 60rpx;
   animation: float 20s infinite linear;
+}
+
+.header::after {
+  content: '🥏';
+  position: absolute;
+  top: 20rpx;
+  right: 30rpx;
+  font-size: 40rpx;
+  opacity: 0.3;
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes float {
@@ -48,6 +64,24 @@
   opacity: 0.95;
   font-weight: 400;
   text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--spacing-md);
+}
+
+.brand-tagline {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tagline-text {
+  font-size: 24rpx;
+  font-weight: 500;
+  opacity: 0.9;
+  letter-spacing: 1rpx;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================
