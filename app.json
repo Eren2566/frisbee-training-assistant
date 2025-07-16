@@ -12,16 +12,16 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#1AAD19",
-    "navigationBarTitleText": "飞盘队训练助手",
+    "navigationBarBackgroundColor": "#FF6B35",
+    "navigationBarTitleText": "FlyMate",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f8f8f8"
+    "backgroundColor": "#FAFAFA"
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#1AAD19",
+    "color": "#9E9E9E",
+    "selectedColor": "#FF6B35",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",

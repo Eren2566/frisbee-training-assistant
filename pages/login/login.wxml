@@ -3,8 +3,8 @@
   <!-- 登录头部 -->
   <view class="login-header">
     <view class="logo">🥏</view>
-    <text class="app-name">飞盘队训练助手</text>
-    <text class="app-desc">专业的飞盘队训练管理工具</text>
+    <text class="app-name">FlyMate</text>
+    <text class="app-desc">Your Ultimate Frisbee Companion</text>
   </view>
 
   <!-- 登录卡片 -->

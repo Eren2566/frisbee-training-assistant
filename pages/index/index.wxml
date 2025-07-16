@@ -3,8 +3,8 @@
   <!-- 头部欢迎区域 -->
   <view class="header">
     <view class="welcome-text">
-      <text class="title">飞盘队训练助手</text>
-      <text class="subtitle">让训练更有序，让团队更团结</text>
+      <text class="title">FlyMate</text>
+      <text class="subtitle">Your Ultimate Frisbee Companion</text>
     </view>
   </view>
 
@@ -31,14 +31,18 @@
   <view class="function-nav" wx:if="{{isLoggedIn}}">
     <view class="nav-item" bindtap="goToEventList">
       <view class="nav-icon">📅</view>
-      <text class="nav-text">训练安排</text>
-      <text class="nav-desc">查看最新训练计划</text>
+      <view class="nav-content">
+        <text class="nav-text">训练安排</text>
+        <text class="nav-desc">查看最新训练计划</text>
+      </view>
     </view>
-    
+
     <view class="nav-item" bindtap="goToProfile">
       <view class="nav-icon">👤</view>
-      <text class="nav-text">个人中心</text>
-      <text class="nav-desc">查看出勤记录</text>
+      <view class="nav-content">
+        <text class="nav-text">个人中心</text>
+        <text class="nav-desc">查看出勤记录</text>
+      </view>
     </view>
   </view>
 
