@@ -38,7 +38,7 @@
       <view class="event-info">
         <view class="info-item">
           <text class="info-icon">🕐</text>
-          <text class="info-text">{{item.eventTime}}</text>
+          <text class="info-text">{{item.formattedTime}}</text>
         </view>
         
         <view class="info-item">

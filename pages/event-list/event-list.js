@@ -59,8 +59,14 @@ Page({
         console.log('获取训练列表成功:', res)
         
         if (res.result.success) {
+          // 格式化时间显示
+          const eventList = res.result.data.map(event => ({
+            ...event,
+            formattedTime: this.formatTime(event.eventTime)
+          }))
+
           this.setData({
-            eventList: res.result.data
+            eventList: eventList
           })
         } else {
           app.showError(res.result.message || '获取训练列表失败')

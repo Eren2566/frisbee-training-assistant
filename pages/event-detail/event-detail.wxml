@@ -15,7 +15,7 @@
       <view class="info-item">
         <text class="info-icon">🕐</text>
         <text class="info-label">训练时间</text>
-        <text class="info-value">{{eventDetail.eventTime}}</text>
+        <text class="info-value">{{eventDetail.formattedTime}}</text>
       </view>
       
       <view class="info-item">

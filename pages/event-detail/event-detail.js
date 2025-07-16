@@ -81,8 +81,13 @@ Page({
       },
       success: (res) => {
         if (res.result.success) {
+          const eventDetail = {
+            ...res.result.data,
+            formattedTime: this.formatTime(res.result.data.eventTime)
+          }
+
           this.setData({
-            eventDetail: res.result.data
+            eventDetail: eventDetail
           })
         } else {
           app.showError(res.result.message || '获取训练详情失败')
