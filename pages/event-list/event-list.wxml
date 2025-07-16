@@ -1,9 +1,9 @@
 <!--pages/event-list/event-list.wxml-->
-<view class="page">
+<view class="page page-enter">
   <!-- 头部操作区 -->
   <view class="header-actions" wx:if="{{isAdmin}}">
-    <button class="btn-primary create-btn" bindtap="goToCreateEvent">
-      <text class="btn-icon">➕</text>
+    <button class="btn-primary create-btn btn-touch mobile-bounce-in touch-optimized gpu-accelerated" bindtap="goToCreateEvent">
+      <text class="btn-icon icon icon-add icon-sm"></text>
       <text>创建训练</text>
     </button>
   </view>
@@ -11,20 +11,22 @@
   <!-- 训练列表 -->
   <view class="event-list" wx:if="{{!isLoading}}">
     <!-- 空状态 -->
-    <view class="empty-state" wx:if="{{eventList.length === 0}}">
-      <view class="empty-icon">📅</view>
+    <view class="empty-state-enhanced" wx:if="{{eventList.length === 0}}">
+      <view class="empty-state-icon icon icon-calendar icon-gradient"></view>
       <text class="empty-text">暂无训练安排</text>
-      <button class="btn-secondary" wx:if="{{isAdmin}}" bindtap="goToCreateEvent">
+      <text class="empty-desc">开始创建您的第一个训练计划吧！</text>
+      <button class="btn-secondary btn-click mobile-bounce-in delay-200 touch-optimized gpu-accelerated" wx:if="{{isAdmin}}" bindtap="goToCreateEvent">
         创建第一个训练
       </button>
     </view>
 
     <!-- 训练卡片列表 -->
-    <view class="event-item card" 
-          wx:for="{{eventList}}" 
+    <view class="event-item card card-touch card-highlight mobile-slide-right gpu-accelerated touch-optimized"
+          wx:for="{{eventList}}"
           wx:key="_id"
           bindtap="goToEventDetail"
-          data-id="{{item._id}}">
+          data-id="{{item._id}}"
+          style="animation-delay: {{index * 0.15}}s;">
       
       <!-- 训练标题和状态 -->
       <view class="event-header">
@@ -37,12 +39,12 @@
       <!-- 训练信息 -->
       <view class="event-info">
         <view class="info-item">
-          <text class="info-icon">🕐</text>
+          <text class="info-icon icon icon-time icon-gradient-secondary icon-md"></text>
           <text class="info-text">{{item.formattedTime}}</text>
         </view>
-        
+
         <view class="info-item">
-          <text class="info-icon">📍</text>
+          <text class="info-icon icon icon-location icon-gradient-secondary icon-md"></text>
           <text class="info-text">{{item.location}}</text>
         </view>
       </view>
@@ -55,14 +57,22 @@
       <!-- 操作按钮 -->
       <view class="event-actions">
         <text class="action-hint">点击查看详情</text>
-        <text class="action-arrow">→</text>
+        <text class="action-arrow icon icon-arrow-right icon-primary icon-md"></text>
       </view>
     </view>
   </view>
 
   <!-- 加载状态 -->
-  <view class="loading-state" wx:if="{{isLoading}}">
-    <view class="loading-icon">⏳</view>
-    <text class="loading-text">加载中...</text>
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <!-- 骨架屏 -->
+    <view class="skeleton-card skeleton loading-shimmer"></view>
+    <view class="skeleton-card skeleton loading-shimmer"></view>
+    <view class="skeleton-card skeleton loading-shimmer"></view>
+
+    <!-- 传统加载提示 -->
+    <view class="loading-state">
+      <view class="loading-icon icon icon-loading icon-spin icon-primary icon-2xl"></view>
+      <text class="loading-text">加载训练数据中...</text>
+    </view>
   </view>
 </view>

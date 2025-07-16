@@ -39,7 +39,7 @@
           >
             <view class="picker-item">
               <text class="picker-text">{{formData.eventTime.split(' ')[0] || '选择日期'}}</text>
-              <text class="picker-arrow">📅</text>
+              <text class="picker-arrow icon icon-calendar icon-primary icon-md"></text>
             </view>
           </picker>
           
@@ -50,7 +50,7 @@
           >
             <view class="picker-item">
               <text class="picker-text">{{formData.eventTime.split(' ')[1] || '选择时间'}}</text>
-              <text class="picker-arrow">🕐</text>
+              <text class="picker-arrow icon icon-time icon-primary icon-md"></text>
             </view>
           </picker>
         </view>
@@ -131,7 +131,7 @@
 
   <!-- 创建提示 -->
   <view class="tips-card">
-    <text class="tips-title">💡 创建提示</text>
+    <text class="tips-title"><text class="icon icon-info icon-warning icon-md"></text> 创建提示</text>
     <view class="tips-list">
       <text class="tip-item">• 训练主题要简洁明了，便于队员快速了解</text>
       <text class="tip-item">• 训练时间建议提前1-2天发布</text>

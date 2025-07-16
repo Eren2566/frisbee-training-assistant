@@ -407,18 +407,100 @@ page {
 }
 
 /* ==========================================
-   动画效果
+   移动端优化动画系统
    ========================================== */
+
+/* 页面进入动画 - 移动端优化 */
+.page-enter {
+  animation: pageSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0); /* 启用硬件加速 */
+}
+
+.page-enter-from-right {
+  animation: pageSlideInFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+}
+
+.page-enter-from-left {
+  animation: pageSlideInFromLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+}
+
+/* 基础动画 - 移动端优化 */
 .fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.5s ease-out;
+  transform: translateZ(0);
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+}
+
+.fade-in-down {
+  animation: fadeInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
 }
 
 .slide-up {
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.5s ease-out;
+  transform: translateZ(0);
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-out;
+  transform: translateZ(0);
 }
 
 .scale-in {
-  animation: scaleIn 0.2s ease-out;
+  animation: scaleIn 0.4s ease-out;
+  transform: translateZ(0);
+}
+
+.scale-bounce {
+  animation: scaleBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: translateZ(0);
+}
+
+/* 延迟动画 - 移动端优化 */
+.delay-100 { animation-delay: 0.15s; }
+.delay-200 { animation-delay: 0.3s; }
+.delay-300 { animation-delay: 0.45s; }
+.delay-400 { animation-delay: 0.6s; }
+.delay-500 { animation-delay: 0.75s; }
+
+/* 动画关键帧 - 移动端优化 */
+@keyframes pageSlideIn {
+  from {
+    transform: translateY(150rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pageSlideInFromRight {
+  from {
+    transform: translateX(100%) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pageSlideInFromLeft {
+  from {
+    transform: translateX(-100%) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
@@ -430,13 +512,46 @@ page {
   }
 }
 
-@keyframes slideUp {
+@keyframes fadeInUp {
   from {
-    transform: translateY(30rpx);
+    transform: translateY(120rpx) translateZ(0);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    transform: translateY(-120rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(80rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-80rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateZ(0);
     opacity: 1;
   }
 }
@@ -447,6 +562,510 @@ page {
     opacity: 0;
   }
   to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleBounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 移动端触摸反馈优化 */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+}
+
+.card-hover:active {
+  transform: translateY(-12rpx) scale(1.03) translateZ(0);
+  box-shadow: var(--shadow-xl);
+}
+
+/* 按钮点击动画 - 移动端优化 */
+.btn-click {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+}
+
+.btn-click:active {
+  transform: scale(0.92) translateZ(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 强化触摸反馈 */
+.touch-feedback {
+  transition: all 0.15s ease;
+  transform: translateZ(0);
+}
+
+.touch-feedback:active {
+  transform: scale(0.95) translateZ(0);
+  opacity: 0.8;
+}
+
+/* 优化的卡片触摸反馈 */
+.card-touch {
+  position: relative;
+  transform: translateZ(0);
+  transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-touch:active {
+  transform: scale(0.97) translateY(2rpx) translateZ(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 卡片背景高亮效果 */
+.card-highlight {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.15s ease;
+}
+
+.card-highlight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.03) 0%, rgba(33, 150, 243, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.card-highlight:active::after {
+  opacity: 1;
+}
+
+/* 按钮触摸反馈优化 */
+.btn-touch {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn-touch:active {
+  transform: scale(0.95) translateZ(0);
+}
+
+.btn-touch::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.btn-touch:active::after {
+  opacity: 1;
+}
+
+/* 加载动画增强 */
+.loading-pulse {
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+.loading-wave {
+  animation: loadingWave 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes loadingWave {
+  0%, 60%, 100% {
+    transform: translateY(0) translateZ(0);
+  }
+  30% {
+    transform: translateY(-30rpx) translateZ(0);
+  }
+}
+
+/* 移动端专用动画 */
+.mobile-shake {
+  animation: mobileShake 0.5s ease-in-out;
+}
+
+.mobile-bounce-in {
+  animation: mobileBounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mobile-slide-left {
+  animation: mobileSlideLeft 0.5s ease-out;
+}
+
+.mobile-slide-right {
+  animation: mobileSlideRight 0.5s ease-out;
+}
+
+@keyframes mobileShake {
+  0%, 100% { transform: translateX(0) translateZ(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-20rpx) translateZ(0); }
+  20%, 40%, 60%, 80% { transform: translateX(20rpx) translateZ(0); }
+}
+
+@keyframes mobileBounceIn {
+  0% {
+    transform: scale(0.3) translateZ(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15) translateZ(0);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(0.9) translateZ(0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes mobileSlideLeft {
+  from {
+    transform: translateX(100rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+@keyframes mobileSlideRight {
+  from {
+    transform: translateX(-100rpx) translateZ(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+    opacity: 1;
+  }
+}
+
+/* 移动端性能优化 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000rpx;
+}
+
+/* 触摸优化 */
+.touch-optimized {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ==========================================
+   骨架屏加载动效
+   ========================================== */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: skeletonLoading 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 32rpx;
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text.large {
+  height: 40rpx;
+}
+
+.skeleton-text.small {
+  height: 24rpx;
+}
+
+.skeleton-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-card {
+  height: 200rpx;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-lg);
+}
+
+.skeleton-button {
+  height: 80rpx;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 加载状态容器 */
+.loading-container {
+  padding: var(--spacing-lg);
+}
+
+.loading-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #f6f7f8;
+}
+
+.loading-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+  content: '';
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 数据出现动画 */
+.data-appear {
+  animation: dataFadeIn 0.5s ease-out;
+}
+
+.data-appear-delayed {
+  animation: dataFadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes dataFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+/* 空状态优化 */
+.empty-state-enhanced {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  animation: emptyStateFadeIn 0.8s ease-out;
+}
+
+.empty-state-icon {
+  font-size: 120rpx;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.6;
+  animation: emptyIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes emptyStateFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes emptyIconFloat {
+  0%, 100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(-20rpx) translateZ(0);
+  }
+}
+
+/* ==========================================
+   专业图标系统
+   ========================================== */
+.icon {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* 基础图标尺寸 */
+.icon-xs { font-size: 24rpx; }
+.icon-sm { font-size: 28rpx; }
+.icon-md { font-size: 32rpx; }
+.icon-lg { font-size: 40rpx; }
+.icon-xl { font-size: 48rpx; }
+.icon-2xl { font-size: 64rpx; }
+
+/* 图标颜色 */
+.icon-primary { color: var(--primary-color); }
+.icon-secondary { color: var(--secondary-color); }
+.icon-success { color: var(--success-color); }
+.icon-warning { color: var(--warning-color); }
+.icon-danger { color: var(--danger-color); }
+.icon-gray { color: var(--gray-500); }
+
+/* 渐变图标 */
+.icon-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.icon-gradient-secondary {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 专业图标映射 */
+.icon-time::before { content: "⏰"; }
+.icon-location::before { content: "📍"; }
+.icon-calendar::before { content: "📅"; }
+.icon-user::before { content: "👤"; }
+.icon-users::before { content: "👥"; }
+.icon-frisbee::before { content: "🥏"; }
+.icon-add::before { content: "➕"; }
+.icon-check::before { content: "✅"; }
+.icon-edit::before { content: "📝"; }
+.icon-stats::before { content: "📊"; }
+.icon-settings::before { content: "⚙️"; }
+.icon-home::before { content: "🏠"; }
+.icon-list::before { content: "📋"; }
+.icon-profile::before { content: "👤"; }
+.icon-logout::before { content: "🚪"; }
+.icon-arrow-right::before { content: "→"; }
+.icon-arrow-left::before { content: "←"; }
+.icon-arrow-up::before { content: "↑"; }
+.icon-arrow-down::before { content: "↓"; }
+.icon-close::before { content: "✕"; }
+.icon-menu::before { content: "☰"; }
+.icon-search::before { content: "🔍"; }
+.icon-filter::before { content: "🔽"; }
+.icon-sort::before { content: "⇅"; }
+.icon-refresh::before { content: "🔄"; }
+.icon-loading::before { content: "⏳"; }
+.icon-empty::before { content: "📭"; }
+.icon-warning::before { content: "⚠️"; }
+.icon-error::before { content: "❌"; }
+.icon-success::before { content: "✅"; }
+.icon-info::before { content: "ℹ️"; }
+
+/* 运动相关图标 */
+.icon-training::before { content: "🏃"; }
+.icon-team::before { content: "👥"; }
+.icon-coach::before { content: "👨‍🏫"; }
+.icon-player::before { content: "🏃‍♂️"; }
+.icon-field::before { content: "🏟️"; }
+.icon-trophy::before { content: "🏆"; }
+.icon-medal::before { content: "🥇"; }
+.icon-target::before { content: "🎯"; }
+
+/* 状态图标 */
+.icon-present::before { content: "✅"; }
+.icon-absent::before { content: "❌"; }
+.icon-leave::before { content: "🏠"; }
+.icon-pending::before { content: "⏳"; }
+.icon-approved::before { content: "✅"; }
+.icon-rejected::before { content: "❌"; }
+
+/* 图标动画 */
+.icon-spin {
+  animation: iconSpin 1s linear infinite;
+}
+
+.icon-bounce {
+  animation: iconBounce 2s infinite;
+}
+
+.icon-pulse {
+  animation: iconPulse 2s infinite;
+}
+
+@keyframes iconSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes iconBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6rpx);
+  }
+  60% {
+    transform: translateY(-3rpx);
+  }
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
     transform: scale(1);
     opacity: 1;
   }

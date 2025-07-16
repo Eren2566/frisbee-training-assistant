@@ -13,13 +13,13 @@
     <!-- 训练基本信息 -->
     <view class="event-info">
       <view class="info-item">
-        <text class="info-icon">🕐</text>
+        <text class="info-icon icon icon-time icon-gradient-secondary icon-lg"></text>
         <text class="info-label">训练时间</text>
         <text class="info-value">{{eventDetail.formattedTime}}</text>
       </view>
-      
+
       <view class="info-item">
-        <text class="info-icon">📍</text>
+        <text class="info-icon icon icon-location icon-gradient-secondary icon-lg"></text>
         <text class="info-label">训练地点</text>
         <text class="info-value">{{eventDetail.location}}</text>
       </view>

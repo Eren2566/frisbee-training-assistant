@@ -2,8 +2,41 @@
 <view class="page">
   <!-- 已登录状态 -->
   <view wx:if="{{isLoggedIn}}">
+    <!-- 加载状态 -->
+    <view class="loading-container" wx:if="{{isLoading}}">
+      <!-- 用户信息骨架屏 -->
+      <view class="card">
+        <view class="user-info">
+          <view class="skeleton-avatar skeleton loading-shimmer"></view>
+          <view class="user-details">
+            <view class="skeleton-text large skeleton loading-shimmer" style="width: 200rpx;"></view>
+            <view class="skeleton-text skeleton loading-shimmer" style="width: 120rpx;"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 统计数据骨架屏 -->
+      <view class="card">
+        <view class="skeleton-text large skeleton loading-shimmer" style="width: 150rpx; margin-bottom: 30rpx;"></view>
+        <view class="stats-grid">
+          <view class="stat-item">
+            <view class="skeleton-text large skeleton loading-shimmer" style="width: 80rpx;"></view>
+            <view class="skeleton-text skeleton loading-shimmer" style="width: 100rpx;"></view>
+          </view>
+          <view class="stat-item">
+            <view class="skeleton-text large skeleton loading-shimmer" style="width: 80rpx;"></view>
+            <view class="skeleton-text skeleton loading-shimmer" style="width: 100rpx;"></view>
+          </view>
+          <view class="stat-item">
+            <view class="skeleton-text large skeleton loading-shimmer" style="width: 80rpx;"></view>
+            <view class="skeleton-text skeleton loading-shimmer" style="width: 100rpx;"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 用户信息卡片 -->
-    <view class="card user-card">
+    <view class="card user-card data-appear" wx:else>
       <view class="user-info">
         <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
         <view class="user-details">
@@ -44,9 +77,10 @@
       </view>
 
       <!-- 空状态 -->
-      <view class="empty-state" wx:elif="{{myRegistrations.length === 0}}">
-        <view class="empty-icon">📝</view>
+      <view class="empty-state-enhanced" wx:elif="{{myRegistrations.length === 0}}">
+        <view class="empty-state-icon icon icon-edit icon-gradient"></view>
         <text class="empty-text">暂无训练记录</text>
+        <text class="empty-desc">参加训练后这里会显示您的出勤记录</text>
       </view>
 
       <!-- 记录列表 -->
@@ -66,11 +100,11 @@
 
           <view class="registration-info">
             <view class="info-item">
-              <text class="info-icon">🕐</text>
+              <text class="info-icon icon icon-time icon-secondary icon-sm"></text>
               <text class="info-text">{{item.eventInfo.eventTime}}</text>
             </view>
             <view class="info-item">
-              <text class="info-icon">📍</text>
+              <text class="info-icon icon icon-location icon-secondary icon-sm"></text>
               <text class="info-text">{{item.eventInfo.location}}</text>
             </view>
           </view>
@@ -97,7 +131,7 @@
   <!-- 未登录状态 -->
   <view class="login-prompt" wx:else>
     <view class="prompt-content">
-      <view class="prompt-icon">👤</view>
+      <view class="prompt-icon icon icon-user icon-gradient icon-2xl"></view>
       <text class="prompt-title">请先登录</text>
       <text class="prompt-desc">登录后可查看个人出勤记录</text>
       <button class="btn-primary" bindtap="goToLogin">立即登录</button>

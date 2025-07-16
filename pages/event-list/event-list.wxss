@@ -44,132 +44,224 @@
 }
 
 .btn-icon {
-  font-size: 32rpx;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .event-list {
   padding: 0 var(--spacing-md);
 }
 
+/* ==========================================
+   空状态样式
+   ========================================== */
 .empty-state {
   text-align: center;
-  padding: 120rpx 40rpx;
+  padding: var(--spacing-2xl) var(--spacing-xl);
 }
 
 .empty-icon {
-  font-size: 120rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-text {
   display: block;
-  font-size: 32rpx;
-  color: #666;
-  margin-bottom: 40rpx;
+  font-size: 34rpx;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+  font-weight: 500;
 }
 
+.empty-desc {
+  display: block;
+  font-size: 26rpx;
+  color: var(--gray-500);
+  margin-bottom: var(--spacing-xl);
+  font-weight: 400;
+}
+
+/* ==========================================
+   训练卡片样式
+   ========================================== */
 .event-item {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
   position: relative;
+  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+  border: 1rpx solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.event-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.event-item:hover::before {
+  transform: scaleX(1);
 }
 
 .event-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
 }
 
 .event-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--gray-800);
   flex: 1;
-  margin-right: 20rpx;
+  margin-right: var(--spacing-md);
+  line-height: 1.3;
 }
 
 .event-status {
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-xl);
   font-size: 24rpx;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
 .event-status.registering {
-  background-color: #e8f5e8;
-  color: #1AAD19;
+  background: linear-gradient(135deg, var(--success-color) 0%, var(--success-light) 100%);
+  color: white;
 }
 
 .event-status.finished {
-  background-color: #f5f5f5;
-  color: #666;
+  background: linear-gradient(135deg, var(--gray-400) 0%, var(--gray-500) 100%);
+  color: white;
 }
 
+/* ==========================================
+   训练信息样式
+   ========================================== */
 .event-info {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
 }
 
 .info-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
 }
 
 .info-icon {
-  font-size: 28rpx;
-  margin-right: 15rpx;
-  width: 40rpx;
+  margin-right: var(--spacing-md);
+  width: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info-text {
   font-size: 28rpx;
-  color: #666;
+  color: var(--gray-700);
   flex: 1;
+  font-weight: 500;
 }
 
 .event-content {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
 }
 
 .content-text {
   font-size: 26rpx;
-  color: #999;
-  line-height: 1.4;
+  color: var(--gray-600);
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  background-color: var(--gray-100);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border-left: 4rpx solid var(--primary-color);
 }
 
+/* ==========================================
+   操作区域样式
+   ========================================== */
 .event-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 20rpx;
-  border-top: 1rpx solid #f0f0f0;
+  padding-top: var(--spacing-md);
+  border-top: 1rpx solid var(--gray-200);
+  margin-top: var(--spacing-md);
 }
 
 .action-hint {
-  font-size: 26rpx;
-  color: #1AAD19;
+  font-size: 28rpx;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 .action-arrow {
-  font-size: 28rpx;
-  color: #1AAD19;
+  animation: bounce 2s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(4rpx);
+  }
+  60% {
+    transform: translateX(2rpx);
+  }
+}
+
+/* ==========================================
+   加载状态样式
+   ========================================== */
 .loading-state {
   text-align: center;
-  padding: 120rpx 40rpx;
+  padding: var(--spacing-2xl) var(--spacing-xl);
 }
 
 .loading-icon {
-  font-size: 60rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .loading-text {
-  font-size: 28rpx;
-  color: #666;
+  font-size: 30rpx;
+  color: var(--gray-600);
+  font-weight: 500;
 }

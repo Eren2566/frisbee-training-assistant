@@ -1,18 +1,48 @@
 /* pages/my-profile/my-profile.wxss */
+
+/* ==========================================
+   个人中心现代化样式
+   ========================================== */
 .user-card {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
+  background: var(--gradient-sunset);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40rpx 40rpx;
+  animation: float 15s linear infinite;
 }
 
 .user-info {
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 60rpx;
-  margin-right: 30rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: var(--radius-full);
+  margin-right: var(--spacing-lg);
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .user-details {
@@ -21,62 +51,115 @@
 
 .nickname {
   display: block;
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 15rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
 
 .role-badge {
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
-  font-size: 24rpx;
-  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  font-size: 26rpx;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
 }
 
 .role-badge.admin {
-  background-color: #fff3cd;
-  color: #856404;
+  background: rgba(255, 152, 0, 0.9);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .role-badge.member {
-  background-color: #e8f5e8;
-  color: #1AAD19;
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .stats-card {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+  border: 1rpx solid var(--gray-200);
+  position: relative;
+  overflow: hidden;
 }
 
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: var(--gradient-secondary);
+}
+
+/* ==========================================
+   卡片标题和统计样式
+   ========================================== */
 .card-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 30rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  padding-left: var(--spacing-md);
+}
+
+.card-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 32rpx;
+  background: var(--gradient-secondary);
+  border-radius: var(--radius-sm);
 }
 
 .stats-grid {
   display: flex;
   justify-content: space-around;
+  gap: var(--spacing-md);
 }
 
 .stat-item {
   text-align: center;
+  flex: 1;
+  padding: var(--spacing-md);
+  background: linear-gradient(145deg, var(--gray-50) 0%, #ffffff 100%);
+  border-radius: var(--radius-lg);
+  border: 1rpx solid var(--gray-200);
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4rpx);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-number {
   display: block;
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #1AAD19;
-  margin-bottom: 10rpx;
+  font-size: 52rpx;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-sm);
 }
 
 .stat-label {
   display: block;
   font-size: 26rpx;
-  color: #666;
+  color: var(--gray-600);
+  font-weight: 500;
 }
 
 .loading-state {

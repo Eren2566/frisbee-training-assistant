@@ -1,27 +1,62 @@
 /* pages/admin/create-event/create-event.wxss */
+
+/* ==========================================
+   创建训练页面现代化样式
+   ========================================== */
 .page-header {
   text-align: center;
-  padding: 40rpx 20rpx;
-  background: linear-gradient(135deg, #1AAD19 0%, #4CAF50 100%);
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: var(--gradient-sunset);
   color: white;
-  margin-bottom: 30rpx;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 30rpx 30rpx;
+  animation: float 20s linear infinite;
 }
 
 .page-title {
   display: block;
-  font-size: 40rpx;
-  font-weight: bold;
-  margin-bottom: 15rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
 
 .page-desc {
   display: block;
-  font-size: 26rpx;
-  opacity: 0.9;
+  font-size: 28rpx;
+  opacity: 0.95;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
 }
 
 .form-section {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+  border: 1rpx solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.form-section:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2rpx);
 }
 
 .form-item {
@@ -30,54 +65,86 @@
 
 .form-label {
   display: block;
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 15rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  padding-left: var(--spacing-sm);
 }
 
+.form-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rpx;
+  height: 24rpx;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================
+   表单输入样式
+   ========================================== */
 .form-input {
   width: 100%;
-  padding: 25rpx 20rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 10rpx;
+  padding: var(--spacing-lg) var(--spacing-md);
+  border: 2rpx solid var(--gray-300);
+  border-radius: var(--radius-md);
   font-size: 28rpx;
   box-sizing: border-box;
-  background-color: #fafafa;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
 }
 
 .form-input:focus {
-  border-color: #1AAD19;
+  border-color: var(--primary-color);
   background-color: white;
+  box-shadow: 0 0 0 4rpx rgba(255, 107, 53, 0.1), inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  outline: none;
 }
 
 .form-textarea {
   width: 100%;
-  padding: 25rpx 20rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 10rpx;
+  padding: var(--spacing-lg) var(--spacing-md);
+  border: 2rpx solid var(--gray-300);
+  border-radius: var(--radius-md);
   font-size: 28rpx;
-  min-height: 200rpx;
+  min-height: 240rpx;
   box-sizing: border-box;
-  background-color: #fafafa;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  resize: none;
 }
 
 .form-textarea:focus {
-  border-color: #1AAD19;
+  border-color: var(--primary-color);
   background-color: white;
+  box-shadow: 0 0 0 4rpx rgba(255, 107, 53, 0.1), inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  outline: none;
 }
 
 .input-hint {
   position: absolute;
-  right: 15rpx;
-  bottom: 15rpx;
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
   font-size: 22rpx;
-  color: #999;
+  color: var(--gray-500);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 4rpx 8rpx;
+  border-radius: var(--radius-sm);
 }
 
+/* ==========================================
+   时间选择器样式
+   ========================================== */
 .datetime-picker {
   display: flex;
-  gap: 20rpx;
+  gap: var(--spacing-md);
 }
 
 .picker-item {
@@ -85,59 +152,113 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25rpx 20rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 10rpx;
-  background-color: #fafafa;
+  padding: var(--spacing-lg) var(--spacing-md);
+  border: 2rpx solid var(--gray-300);
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.picker-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2rpx);
 }
 
 .picker-text {
   font-size: 28rpx;
-  color: #333;
+  color: var(--gray-800);
+  font-weight: 500;
 }
 
 .picker-arrow {
-  font-size: 24rpx;
-  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* ==========================================
+   操作按钮样式
+   ========================================== */
 .form-actions {
   display: flex;
-  gap: 20rpx;
-  margin: 40rpx 20rpx;
+  gap: var(--spacing-md);
+  margin: var(--spacing-xl) var(--spacing-md);
 }
 
 .reset-btn, .submit-btn {
   flex: 1;
-  padding: 25rpx;
+  padding: var(--spacing-lg) var(--spacing-xl);
   font-size: 32rpx;
-  border-radius: 10rpx;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
 }
 
+.reset-btn:hover, .submit-btn:hover {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-lg);
+}
+
+.reset-btn:active, .submit-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================
+   提示卡片样式
+   ========================================== */
 .tips-card {
-  margin: 40rpx 20rpx 20rpx;
-  padding: 30rpx;
-  background-color: #f8f9fa;
-  border-radius: 15rpx;
-  border-left: 6rpx solid #1AAD19;
+  margin: var(--spacing-xl) var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-xl);
+  background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: var(--radius-xl);
+  border-left: 6rpx solid var(--primary-color);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.tips-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100rpx;
+  height: 100rpx;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
 }
 
 .tips-title {
   display: block;
-  font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 1;
 }
 
 .tips-list {
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
+  gap: var(--spacing-sm);
 }
 
 .tip-item {
   font-size: 26rpx;
-  color: #666;
-  line-height: 1.5;
+  color: var(--gray-700);
+  line-height: 1.6;
+  position: relative;
+  padding-left: var(--spacing-md);
+}
+
+.tip-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
 }
