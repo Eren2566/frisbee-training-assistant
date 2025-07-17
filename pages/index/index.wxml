@@ -19,11 +19,79 @@
     </view>
   </view>
 
-  <!-- 训练动态中心 - 即将实现 -->
+  <!-- 训练动态中心 -->
   <view class="training-center" wx:if="{{isLoggedIn}}">
-    <!-- 这里将实现训练动态中心 -->
-    <view class="placeholder-message">
-      <text class="placeholder-text">训练动态中心正在开发中...</text>
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{isLoading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载训练信息中...</text>
+    </view>
+
+    <!-- 有下次训练 -->
+    <view class="training-card" wx:elif="{{nextEvent}}">
+      <view class="training-header">
+        <view class="training-icon">🏃</view>
+        <text class="training-title">下次训练</text>
+      </view>
+
+      <view class="training-info">
+        <view class="info-item">
+          <view class="info-icon">📅</view>
+          <text class="info-text">{{nextEvent.title}}</text>
+        </view>
+
+        <view class="info-item">
+          <view class="info-icon">⏰</view>
+          <text class="info-text">{{nextEvent.eventTime}}</text>
+        </view>
+
+        <view class="info-item">
+          <view class="info-icon">📍</view>
+          <text class="info-text">{{nextEvent.location}}</text>
+        </view>
+
+        <view class="info-item">
+          <view class="info-icon">👥</view>
+          <text class="info-text">已报名 {{registrationCount}} 人</text>
+        </view>
+      </view>
+
+      <!-- 倒计时 -->
+      <view class="countdown-section" wx:if="{{countdownText}}">
+        <view class="countdown-icon">⏰</view>
+        <text class="countdown-text">倒计时：{{countdownText}}</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <!-- 未报名用户显示报名按钮 -->
+        <button class="btn-primary action-btn" wx:if="{{!userEventStatus}}" bindtap="handleSignUp">
+          立即报名
+        </button>
+
+        <!-- 已报名用户显示请假按钮 -->
+        <button class="btn-warning action-btn" wx:elif="{{userEventStatus.status === 'signed_up'}}" bindtap="handleLeave">
+          申请请假
+        </button>
+
+        <!-- 已请假用户显示状态 -->
+        <view class="status-text" wx:elif="{{userEventStatus.status === 'leave_requested'}}">
+          <text class="leave-status">已请假</text>
+        </view>
+
+        <!-- 查看详情按钮 -->
+        <button class="btn-secondary action-btn" bindtap="goToEventDetail">
+          查看详情
+        </button>
+      </view>
+    </view>
+
+    <!-- 没有下次训练 -->
+    <view class="no-training-card" wx:else>
+      <view class="no-training-icon">📅</view>
+      <text class="no-training-title">暂无即将到来的训练</text>
+      <text class="no-training-desc">请关注队长发布的最新训练安排</text>
+      <button class="btn-secondary" bindtap="goToEventList">查看所有训练</button>
     </view>
   </view>
 </view>

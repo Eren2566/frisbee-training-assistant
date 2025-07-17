@@ -94,9 +94,42 @@ async function getEventList(event, wxContext) {
       .orderBy('eventTime', 'desc')
       .get()
 
+    // 检查并更新过期训练的状态
+    const now = new Date()
+    const updatedEvents = []
+
+    for (const eventItem of result.data) {
+      const eventTime = new Date(eventItem.eventTime)
+
+      // 如果训练时间已过且状态仍为报名中，则更新为已结束
+      if (eventTime < now && eventItem.status === 'registering') {
+        try {
+          await db.collection('Events').doc(eventItem._id).update({
+            data: {
+              status: 'finished',
+              updateTime: new Date()
+            }
+          })
+
+          // 更新返回数据中的状态
+          updatedEvents.push({
+            ...eventItem,
+            status: 'finished',
+            updateTime: new Date()
+          })
+        } catch (updateError) {
+          console.error('更新训练状态失败:', updateError)
+          // 如果更新失败，仍返回原数据
+          updatedEvents.push(eventItem)
+        }
+      } else {
+        updatedEvents.push(eventItem)
+      }
+    }
+
     return {
       success: true,
-      data: result.data,
+      data: updatedEvents,
       message: '获取训练列表成功'
     }
   } catch (error) {
@@ -123,9 +156,36 @@ async function getEventDetail(event, wxContext) {
       }
     }
 
+    let eventData = result.data
+
+    // 检查并更新过期训练的状态
+    const now = new Date()
+    const eventTime = new Date(eventData.eventTime)
+
+    if (eventTime < now && eventData.status === 'registering') {
+      try {
+        await db.collection('Events').doc(eventId).update({
+          data: {
+            status: 'finished',
+            updateTime: new Date()
+          }
+        })
+
+        // 更新返回数据中的状态
+        eventData = {
+          ...eventData,
+          status: 'finished',
+          updateTime: new Date()
+        }
+      } catch (updateError) {
+        console.error('更新训练状态失败:', updateError)
+        // 如果更新失败，仍返回原数据
+      }
+    }
+
     return {
       success: true,
-      data: result.data,
+      data: eventData,
       message: '获取训练详情成功'
     }
   } catch (error) {
