@@ -38,35 +38,42 @@
 1. **Users 集合**
    - 集合名称：`Users`
    - 权限设置：所有用户可读，仅创建者可读写
+   - 字段：`_openid`, `nickName`, `avatarUrl`, `role`, `gender`, `institute`, `discName`, `contactInfo`, `createTime`
 
 2. **Events 集合**
    - 集合名称：`Events`
    - 权限设置：所有用户可读，仅管理员可写
+   - 字段：`_id`, `creatorId`, `title`, `eventTime`, `location`, `content`, `notes`, `status`, `createTime`, `updateTime`
 
 3. **Registrations 集合**
    - 集合名称：`Registrations`
    - 权限设置：所有用户可读，仅创建者可读写
+   - 字段：`_id`, `eventId`, `userId`, `status`, `createTime`, `updateTime`
+
+> 💡 **提示**: 可以使用 `scripts/init-database.js` 脚本快速初始化数据库结构
 
 ### 第四步：部署云函数
 
 在微信开发者工具中，右键以下云函数目录，选择"上传并部署（所有文件）"：
 
-1. `cloudfunctions/user_service`
-2. `cloudfunctions/event_service`
-3. `cloudfunctions/registration_service`
+1. `cloudfunctions/user_service` - 用户认证和管理
+2. `cloudfunctions/event_service` - 训练活动管理
+3. `cloudfunctions/registration_service` - 报名出勤管理
+4. `cloudfunctions/analytics_service` - 数据统计分析
+5. `cloudfunctions/system_service` - 系统管理维护
+6. `cloudfunctions/error_reporter` - 错误监控上报
 
-### 第五步：添加图标资源
+> 💡 **提示**: 可以右键 `cloudfunctions` 文件夹选择"上传并部署：云端安装依赖"一次性部署所有云函数
 
-在 `images/` 目录下添加以下图标文件（建议尺寸 81x81px）：
+### 第五步：验证图标资源
 
-- `home.png` - 首页图标（未选中）
-- `home-active.png` - 首页图标（选中）
-- `event.png` - 训练图标（未选中）
-- `event-active.png` - 训练图标（选中）
-- `profile.png` - 个人中心图标（未选中）
-- `profile-active.png` - 个人中心图标（选中）
+项目已包含TabBar所需的图标文件（位于 `images/` 目录）：
 
-> 💡 **提示**: 如果没有图标文件，可以暂时使用纯色图片或从图标库下载
+- `home.png` / `home-active.png` - 首页图标
+- `event.png` / `event-active.png` - 训练图标
+- `profile.png` / `profile-active.png` - 个人中心图标
+
+> ✅ **已完成**: 图标文件已包含在项目中，无需额外添加
 
 ### 第六步：设置管理员权限
 
