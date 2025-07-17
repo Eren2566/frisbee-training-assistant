@@ -14,6 +14,9 @@ Page({
     isLoading: true
   },
 
+  // 保存原始事件时间用于倒计时计算
+  originalEventTime: null,
+
   onLoad() {
     this.checkLoginStatus()
   },
@@ -72,7 +75,10 @@ Page({
         // 获取用户状态
         const userStatus = await registrationService.getUserEventStatus(nextEvent._id)
 
-        // 格式化时间显示
+        // 保存原始时间用于倒计时计算
+        this.originalEventTime = nextEvent.eventTime
+
+        // 格式化时间用于显示
         const formattedEvent = {
           ...nextEvent,
           eventTime: this.formatDateTime(nextEvent.eventTime)
@@ -87,6 +93,7 @@ Page({
         // 开始倒计时
         this.startCountdown()
       } else {
+        this.originalEventTime = null
         this.setData({
           nextEvent: null,
           userEventStatus: null,
@@ -106,11 +113,24 @@ Page({
 
   // 开始倒计时
   startCountdown() {
-    if (!this.data.nextEvent) return
+    if (!this.data.nextEvent || !this.originalEventTime) return
 
     const updateCountdown = () => {
+      // 检查原始时间是否存在
+      if (!this.originalEventTime) {
+        console.warn('原始事件时间不存在，跳过倒计时更新')
+        return
+      }
+
       const now = new Date()
-      const eventTime = new Date(this.data.nextEvent.eventTime)
+      const eventTime = new Date(this.originalEventTime)
+
+      // 检查时间是否有效
+      if (isNaN(eventTime.getTime())) {
+        console.error('无效的事件时间:', this.originalEventTime)
+        return
+      }
+
       const diff = eventTime - now
 
       if (diff <= 0) {
