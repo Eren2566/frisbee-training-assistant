@@ -11,50 +11,19 @@
     </view>
   </view>
 
-  <!-- 登录状态显示 -->
-  <view class="card fade-in-up delay-100" wx:if="{{isLoggedIn}}">
-    <view class="user-info">
-      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-      <view class="user-details">
-        <text class="nickname">{{userInfo.discName || userInfo.nickName || '未知用户'}}</text>
-        <text class="role">{{userInfo.role === 'admin' ? '队长' : '队员'}}</text>
-      </view>
-    </view>
-  </view>
-
   <!-- 未登录提示 -->
-  <view class="card fade-in-up delay-100" wx:else>
+  <view class="card fade-in-up delay-100" wx:if="{{!isLoggedIn}}">
     <view class="login-prompt">
       <text class="prompt-text">请先登录以使用完整功能</text>
       <button class="btn-primary btn-touch touch-optimized gpu-accelerated" bindtap="goToLogin">立即登录</button>
     </view>
   </view>
 
-  <!-- 功能导航 -->
-  <view class="function-nav" wx:if="{{isLoggedIn}}">
-    <view class="nav-item card-touch card-highlight mobile-bounce-in delay-200 gpu-accelerated touch-optimized" bindtap="goToEventList">
-      <view class="nav-icon icon icon-calendar icon-gradient icon-2xl"></view>
-      <view class="nav-content">
-        <text class="nav-text">训练安排</text>
-        <text class="nav-desc">查看最新训练计划</text>
-      </view>
-    </view>
-
-    <view class="nav-item card-touch card-highlight mobile-bounce-in delay-300 gpu-accelerated touch-optimized" bindtap="goToProfile">
-      <view class="nav-icon icon icon-user icon-gradient icon-2xl"></view>
-      <view class="nav-content">
-        <text class="nav-text">个人中心</text>
-        <text class="nav-desc">查看出勤记录</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 快速操作 -->
-  <view class="quick-actions fade-in-up delay-400" wx:if="{{isLoggedIn}}">
-    <text class="section-title">快速操作</text>
-    <view class="action-buttons">
-      <button class="btn-secondary btn-touch touch-optimized gpu-accelerated" bindtap="goToEventList">查看训练</button>
-      <button class="btn-secondary btn-touch touch-optimized gpu-accelerated" wx:if="{{userInfo.role === 'admin'}}" bindtap="goToCreateEvent">创建训练</button>
+  <!-- 训练动态中心 - 即将实现 -->
+  <view class="training-center" wx:if="{{isLoggedIn}}">
+    <!-- 这里将实现训练动态中心 -->
+    <view class="placeholder-message">
+      <text class="placeholder-text">训练动态中心正在开发中...</text>
     </view>
   </view>
 </view>

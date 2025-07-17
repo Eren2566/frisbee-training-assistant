@@ -279,3 +279,24 @@
 .action-buttons button {
   flex: 1;
 }
+
+/* ==========================================
+   训练动态中心样式（临时占位符）
+   ========================================== */
+.training-center {
+  margin-top: var(--spacing-xl);
+}
+
+.placeholder-message {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: var(--radius-xl);
+  border: 2rpx dashed var(--gray-300);
+}
+
+.placeholder-text {
+  font-size: 32rpx;
+  color: var(--gray-600);
+  font-weight: 500;
+}
