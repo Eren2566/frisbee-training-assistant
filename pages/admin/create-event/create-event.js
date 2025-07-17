@@ -12,7 +12,10 @@ Page({
     },
     isSubmitting: false,
     minDate: '', // 最小可选日期
-    maxDate: ''  // 最大可选日期
+    maxDate: '', // 最大可选日期
+    selectedDate: '', // 选中的日期
+    selectedTime: '', // 选中的时间
+    formattedDateTime: '' // 格式化显示的日期时间
   },
 
   onLoad() {
@@ -80,23 +83,53 @@ Page({
 
   // 日期选择
   onDateChange(e) {
+    const selectedDate = e.detail.value
     this.setData({
-      'formData.eventTime': e.detail.value
+      selectedDate: selectedDate
     })
+
+    // 如果已经选择了时间，则更新完整的日期时间
+    if (this.data.selectedTime) {
+      this.updateDateTime(selectedDate, this.data.selectedTime)
+    }
   },
 
   // 时间选择
   onTimeChange(e) {
-    const date = this.data.formData.eventTime
-    const time = e.detail.value
-    
-    if (date) {
-      this.setData({
-        'formData.eventTime': `${date} ${time}`
-      })
+    const selectedTime = e.detail.value
+    this.setData({
+      selectedTime: selectedTime
+    })
+
+    if (this.data.selectedDate) {
+      this.updateDateTime(this.data.selectedDate, selectedTime)
     } else {
       app.showError('请先选择日期')
     }
+  },
+
+  // 更新日期时间显示
+  updateDateTime(date, time) {
+    const eventTime = `${date} ${time}`
+    const formattedDateTime = this.formatDateTime(date, time)
+
+    this.setData({
+      'formData.eventTime': eventTime,
+      formattedDateTime: formattedDateTime
+    })
+  },
+
+  // 格式化日期时间显示
+  formatDateTime(dateStr, timeStr) {
+    const date = new Date(dateStr)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+
+    // 格式化时间
+    const [hours, minutes] = timeStr.split(':')
+
+    return `${year}年${month}月${day}日 ${hours}:${minutes}`
   },
 
   // 表单验证
@@ -197,7 +230,10 @@ Page({
               location: '',
               content: '',
               notes: ''
-            }
+            },
+            selectedDate: '',
+            selectedTime: '',
+            formattedDateTime: ''
           })
           app.showSuccess('表单已重置')
         }

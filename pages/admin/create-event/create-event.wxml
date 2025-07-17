@@ -29,28 +29,37 @@
     <view class="card form-section">
       <view class="form-item">
         <label class="form-label">训练时间 *</label>
+
+        <!-- 格式化的时间显示 -->
+        <view class="selected-datetime" wx:if="{{formattedDateTime}}">
+          <view class="datetime-display">
+            <text class="datetime-icon">📅</text>
+            <text class="datetime-text">{{formattedDateTime}}</text>
+          </view>
+        </view>
+
         <view class="datetime-picker">
-          <picker 
-            mode="date" 
-            value="{{formData.eventTime.split(' ')[0]}}"
+          <picker
+            mode="date"
+            value="{{selectedDate}}"
             start="{{minDate}}"
             end="{{maxDate}}"
             bindchange="onDateChange"
           >
             <view class="picker-item">
-              <text class="picker-text">{{formData.eventTime.split(' ')[0] || '选择日期'}}</text>
-              <text class="picker-arrow icon icon-calendar icon-primary icon-md"></text>
+              <text class="picker-text">{{selectedDate || '选择日期'}}</text>
+              <text class="picker-arrow">📅</text>
             </view>
           </picker>
-          
-          <picker 
-            mode="time" 
-            value="{{formData.eventTime.split(' ')[1] || '09:00'}}"
+
+          <picker
+            mode="time"
+            value="{{selectedTime || '09:00'}}"
             bindchange="onTimeChange"
           >
             <view class="picker-item">
-              <text class="picker-text">{{formData.eventTime.split(' ')[1] || '选择时间'}}</text>
-              <text class="picker-arrow icon icon-time icon-primary icon-md"></text>
+              <text class="picker-text">{{selectedTime || '选择时间'}}</text>
+              <text class="picker-arrow">⏰</text>
             </view>
           </picker>
         </view>
