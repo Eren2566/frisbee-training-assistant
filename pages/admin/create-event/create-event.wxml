@@ -12,9 +12,9 @@
     <view class="card form-section">
       <view class="form-item">
         <label class="form-label">训练主题 *</label>
-        <input 
-          class="form-input" 
-          type="text" 
+        <input
+          class="form-input"
+          type="text"
           placeholder="请输入训练主题，如：基础传接盘练习"
           value="{{formData.title}}"
           data-field="title"
@@ -46,9 +46,11 @@
             end="{{maxDate}}"
             bindchange="onDateChange"
           >
-            <view class="picker-item">
-              <text class="picker-text">{{selectedDate || '选择日期'}}</text>
-              <text class="picker-arrow">📅</text>
+            <view class="picker-item date-picker">
+              <view class="picker-content">
+                <text class="picker-icon">📅</text>
+                <text class="picker-text">{{selectedDate || '选择日期'}}</text>
+              </view>
             </view>
           </picker>
 
@@ -57,9 +59,11 @@
             value="{{selectedTime || '09:00'}}"
             bindchange="onTimeChange"
           >
-            <view class="picker-item">
-              <text class="picker-text">{{selectedTime || '选择时间'}}</text>
-              <text class="picker-arrow">⏰</text>
+            <view class="picker-item time-picker">
+              <view class="picker-content">
+                <text class="picker-icon">⏰</text>
+                <text class="picker-text">{{selectedTime || '选择时间'}}</text>
+              </view>
             </view>
           </picker>
         </view>
@@ -70,9 +74,9 @@
     <view class="card form-section">
       <view class="form-item">
         <label class="form-label">训练地点 *</label>
-        <input 
-          class="form-input" 
-          type="text" 
+        <input
+          class="form-input"
+          type="text"
           placeholder="请输入训练地点，如：体育场草坪"
           value="{{formData.location}}"
           data-field="location"
@@ -87,8 +91,8 @@
     <view class="card form-section">
       <view class="form-item">
         <label class="form-label">训练内容 *</label>
-        <textarea 
-          class="form-textarea" 
+        <textarea
+          class="form-textarea"
           placeholder="请详细描述训练内容，如：&#10;1. 热身运动（10分钟）&#10;2. 基础传接盘练习（30分钟）&#10;3. 战术配合训练（40分钟）&#10;4. 放松整理（10分钟）"
           value="{{formData.content}}"
           data-field="content"
@@ -104,8 +108,8 @@
     <view class="card form-section">
       <view class="form-item">
         <label class="form-label">备注信息</label>
-        <textarea 
-          class="form-textarea" 
+        <textarea
+          class="form-textarea"
           placeholder="请输入备注信息，如：请带好运动装备、注意防晒等"
           value="{{formData.notes}}"
           data-field="notes"
