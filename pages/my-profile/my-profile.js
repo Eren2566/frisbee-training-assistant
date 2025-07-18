@@ -7,6 +7,8 @@ Page({
     isLoggedIn: false,
     myRegistrations: [],
     isLoading: false,
+    displayAvatarUrl: '',
+    isUploadingAvatar: false,
     stats: {
       totalEvents: 0,
       attendedEvents: 0,
@@ -31,13 +33,23 @@ Page({
     if (userInfo && userInfo._openid) {
       this.setData({
         userInfo: userInfo,
-        isLoggedIn: true
+        isLoggedIn: true,
+        displayAvatarUrl: this.getDisplayAvatarUrl(userInfo)
       })
     } else {
       this.setData({
         isLoggedIn: false
       })
     }
+  },
+
+  // 获取显示的头像URL
+  getDisplayAvatarUrl(userInfo) {
+    // 优先使用自定义头像，否则使用微信头像
+    if (userInfo.customAvatarUrl && userInfo.avatarType === 'custom') {
+      return userInfo.customAvatarUrl
+    }
+    return userInfo.avatarUrl || ''
   },
 
   // 跳转到登录页面
@@ -167,5 +179,117 @@ Page({
     wx.navigateTo({
       url: '/pages/dev-tools/dev-tools'
     })
+  },
+
+  // 选择头像
+  chooseAvatar() {
+    if (this.data.isUploadingAvatar) {
+      wx.showToast({
+        title: '正在上传中，请稍候',
+        icon: 'loading',
+        duration: 2000
+      })
+      return
+    }
+
+    wx.showActionSheet({
+      itemList: ['从相册选择', '拍照'],
+      success: (res) => {
+        const sourceType = res.tapIndex === 0 ? ['album'] : ['camera']
+
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['compressed'], // 使用压缩图片
+          sourceType: sourceType,
+          success: (res) => {
+            const tempFilePath = res.tempFilePaths[0]
+            this.uploadAvatar(tempFilePath)
+          },
+          fail: (error) => {
+            console.error('选择图片失败:', error)
+            wx.showToast({
+              title: '选择图片失败',
+              icon: 'error'
+            })
+          }
+        })
+      }
+    })
+  },
+
+  // 上传头像
+  async uploadAvatar(tempFilePath) {
+    this.setData({ isUploadingAvatar: true })
+
+    wx.showLoading({
+      title: '上传中...',
+      mask: true
+    })
+
+    try {
+      // 上传到云存储
+      const cloudPath = `avatars/${this.data.userInfo._openid}_${Date.now()}.jpg`
+      const uploadResult = await wx.cloud.uploadFile({
+        cloudPath: cloudPath,
+        filePath: tempFilePath
+      })
+
+      // 更新用户头像信息
+      const result = await wx.cloud.callFunction({
+        name: 'user_service',
+        data: {
+          action: 'updateAvatar',
+          avatarUrl: uploadResult.fileID,
+          avatarType: 'custom'
+        }
+      })
+
+      if (result.result.success) {
+        // 更新本地用户信息
+        const updatedUserInfo = {
+          ...this.data.userInfo,
+          customAvatarUrl: uploadResult.fileID,
+          avatarType: 'custom'
+        }
+
+        wx.setStorageSync('userInfo', updatedUserInfo)
+
+        this.setData({
+          userInfo: updatedUserInfo,
+          displayAvatarUrl: uploadResult.fileID
+        })
+
+        wx.showToast({
+          title: '头像更新成功',
+          icon: 'success'
+        })
+      } else {
+        throw new Error(result.result.message)
+      }
+    } catch (error) {
+      console.error('上传头像失败:', error)
+
+      // 根据错误类型提供不同的提示
+      let errorMessage = '上传失败，请重试'
+
+      if (error.errCode === -404011) {
+        errorMessage = '云存储未开通'
+      } else if (error.errCode === -501002) {
+        errorMessage = '网络连接失败'
+      } else if (error.message && error.message.includes('size')) {
+        errorMessage = '图片文件过大'
+      } else if (error.message && error.message.includes('format')) {
+        errorMessage = '图片格式不支持'
+      }
+
+      wx.showToast({
+        title: errorMessage,
+        icon: 'error',
+        duration: 3000
+      })
+    } finally {
+      wx.hideLoading()
+      this.setData({ isUploadingAvatar: false })
+    }
   }
 })

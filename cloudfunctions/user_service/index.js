@@ -18,6 +18,12 @@ exports.main = async (event, context) => {
         return await login(event, wxContext)
       case 'completeUserInfo':
         return await completeUserInfo(event, wxContext)
+      case 'updateAvatar':
+        return await updateAvatar(event, wxContext)
+      case 'updateDiscName':
+        return await updateDiscName(event, wxContext)
+      case 'getDiscNameChangeInfo':
+        return await getDiscNameChangeInfo(event, wxContext)
       default:
         return {
           success: false,
@@ -61,6 +67,14 @@ async function login(event, wxContext) {
           realName: null,
           discName: null,
           contactInfo: null,
+          // 头像相关字段
+          customAvatarUrl: '',
+          avatarType: 'wechat',
+          avatarUpdateTime: null,
+          // 盘名修改限制字段
+          discNameChangeCount: 0,           // 已修改次数，默认0
+          discNameChangeHistory: [],        // 修改历史记录
+          lastDiscNameChangeTime: null,     // 最后修改时间
           createTime: new Date()
         }
       })
@@ -72,6 +86,14 @@ async function login(event, wxContext) {
         avatarUrl: avatarUrl || '',
         role: 'member',
         isInfoCompleted: false, // 标记信息是否完善
+        // 头像相关字段
+        customAvatarUrl: '',
+        avatarType: 'wechat',
+        avatarUpdateTime: null,
+        // 盘名修改限制字段
+        discNameChangeCount: 0,
+        discNameChangeHistory: [],
+        lastDiscNameChangeTime: null,
         createTime: new Date()
       }
     } else {
@@ -192,4 +214,204 @@ function validateDiscName(discName) {
   }
 
   return { valid: true }
+}
+
+// 更新用户头像
+async function updateAvatar(event, wxContext) {
+  const { avatarUrl, avatarType = 'custom' } = event
+  const openid = wxContext.OPENID
+
+  try {
+    // 验证参数
+    if (!avatarUrl) {
+      return {
+        success: false,
+        message: '头像URL不能为空'
+      }
+    }
+
+    // 验证用户是否存在
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    // 更新用户头像信息
+    const updateData = {
+      customAvatarUrl: avatarUrl,
+      avatarType: avatarType,
+      avatarUpdateTime: new Date()
+    }
+
+    await db.collection('Users').where({
+      _openid: openid
+    }).update({
+      data: updateData
+    })
+
+    return {
+      success: true,
+      message: '头像更新成功',
+      data: updateData
+    }
+  } catch (error) {
+    console.error('更新头像失败:', error)
+    return {
+      success: false,
+      message: '更新头像失败',
+      error: error.message
+    }
+  }
+}
+
+// 更新盘名
+async function updateDiscName(event, wxContext) {
+  const { newDiscName } = event
+  const openid = wxContext.OPENID
+
+  try {
+    // 验证参数
+    if (!newDiscName || typeof newDiscName !== 'string') {
+      return {
+        success: false,
+        message: '盘名不能为空'
+      }
+    }
+
+    // 验证盘名格式
+    const validation = validateDiscName(newDiscName)
+    if (!validation.valid) {
+      return {
+        success: false,
+        message: validation.message
+      }
+    }
+
+    // 获取用户信息
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    const user = userResult.data[0]
+    const currentDiscName = user.discName
+    const changeCount = user.discNameChangeCount || 0
+    const changeHistory = user.discNameChangeHistory || []
+
+    // 检查是否已达到修改次数限制
+    if (changeCount >= 3) {
+      return {
+        success: false,
+        message: '已达到盘名修改次数限制（最多3次）',
+        data: {
+          changeCount: changeCount,
+          remainingChanges: 0
+        }
+      }
+    }
+
+    // 检查是否与当前盘名相同
+    if (currentDiscName === newDiscName) {
+      return {
+        success: false,
+        message: '新盘名与当前盘名相同'
+      }
+    }
+
+    // 记录修改历史
+    const changeRecord = {
+      oldName: currentDiscName || '',
+      newName: newDiscName,
+      changeTime: new Date(),
+      changeReason: '用户主动修改'
+    }
+
+    const newChangeHistory = [...changeHistory, changeRecord]
+    const newChangeCount = changeCount + 1
+
+    // 更新用户信息
+    await db.collection('Users').where({
+      _openid: openid
+    }).update({
+      data: {
+        discName: newDiscName,
+        discNameChangeCount: newChangeCount,
+        discNameChangeHistory: newChangeHistory,
+        lastDiscNameChangeTime: new Date()
+      }
+    })
+
+    return {
+      success: true,
+      message: '盘名修改成功',
+      data: {
+        newDiscName: newDiscName,
+        changeCount: newChangeCount,
+        remainingChanges: 3 - newChangeCount,
+        changeHistory: newChangeHistory
+      }
+    }
+  } catch (error) {
+    console.error('修改盘名失败:', error)
+    return {
+      success: false,
+      message: '修改盘名失败',
+      error: error.message
+    }
+  }
+}
+
+// 获取盘名修改信息
+async function getDiscNameChangeInfo(event, wxContext) {
+  const openid = wxContext.OPENID
+
+  try {
+    // 获取用户信息
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    const user = userResult.data[0]
+    const changeCount = user.discNameChangeCount || 0
+    const changeHistory = user.discNameChangeHistory || []
+    const lastChangeTime = user.lastDiscNameChangeTime
+
+    return {
+      success: true,
+      data: {
+        currentDiscName: user.discName || '',
+        changeCount: changeCount,
+        remainingChanges: Math.max(0, 3 - changeCount),
+        canChange: changeCount < 3,
+        changeHistory: changeHistory,
+        lastChangeTime: lastChangeTime
+      }
+    }
+  } catch (error) {
+    console.error('获取盘名修改信息失败:', error)
+    return {
+      success: false,
+      message: '获取信息失败',
+      error: error.message
+    }
+  }
 }

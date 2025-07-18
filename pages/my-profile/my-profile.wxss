@@ -30,19 +30,71 @@
   z-index: 1;
 }
 
+.avatar-container {
+  position: relative;
+  margin-right: var(--spacing-lg);
+  cursor: pointer;
+}
+
 .avatar {
   width: 140rpx;
   height: 140rpx;
   border-radius: var(--radius-full);
-  margin-right: var(--spacing-lg);
   border: 4rpx solid rgba(255, 255, 255, 0.3);
   box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
 }
 
-.avatar:hover {
-  transform: scale(1.05);
-  border-color: rgba(255, 255, 255, 0.5);
+.avatar-container:active .avatar {
+  transform: scale(0.95);
+}
+
+/* 上传状态时的样式 */
+.avatar-container.uploading .avatar {
+  opacity: 0.6;
+  filter: blur(1px);
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.avatar-container:active .avatar-overlay {
+  opacity: 1;
+}
+
+/* 上传状态时显示overlay */
+.avatar-container.uploading .avatar-overlay {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.avatar-edit-text {
+  color: white;
+  font-size: 24rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 上传中的动画效果 */
+.avatar-container.uploading .avatar-edit-text {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .user-details {

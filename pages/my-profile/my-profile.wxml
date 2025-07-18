@@ -38,7 +38,12 @@
     <!-- 用户信息卡片 -->
     <view class="card user-card data-appear" wx:else>
       <view class="user-info">
-        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view class="avatar-container {{isUploadingAvatar ? 'uploading' : ''}}" bindtap="chooseAvatar">
+          <image class="avatar" src="{{displayAvatarUrl}}" mode="aspectFill"></image>
+          <view class="avatar-overlay">
+            <text class="avatar-edit-text">{{isUploadingAvatar ? '上传中...' : '点击更换'}}</text>
+          </view>
+        </view>
         <view class="user-details">
           <text class="nickname">{{userInfo.discName || userInfo.nickName || '未知用户'}}</text>
           <view class="role-badge {{userInfo.role}}">
