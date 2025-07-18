@@ -9,6 +9,15 @@ Page({
     isLoading: false,
     displayAvatarUrl: '',
     isUploadingAvatar: false,
+    // 盘名修改相关
+    showDiscNameModal: false,
+    discNameInfo: {
+      remainingChanges: 3,
+      canChange: true
+    },
+    newDiscName: '',
+    canSubmitDiscName: false,
+    isSubmittingDiscName: false,
     stats: {
       totalEvents: 0,
       attendedEvents: 0,
@@ -179,6 +188,137 @@ Page({
     wx.navigateTo({
       url: '/pages/dev-tools/dev-tools'
     })
+  },
+
+  // 显示盘名修改弹窗
+  async showEditDiscNameModal() {
+    // 先获取盘名修改信息
+    try {
+      const result = await wx.cloud.callFunction({
+        name: 'user_service',
+        data: {
+          action: 'getDiscNameChangeInfo'
+        }
+      })
+
+      if (result.result.success) {
+        this.setData({
+          discNameInfo: result.result.data,
+          showDiscNameModal: true,
+          newDiscName: ''
+        })
+      } else {
+        wx.showToast({
+          title: '获取信息失败',
+          icon: 'error'
+        })
+      }
+    } catch (error) {
+      console.error('获取盘名信息失败:', error)
+      wx.showToast({
+        title: '获取信息失败',
+        icon: 'error'
+      })
+    }
+  },
+
+  // 隐藏盘名修改弹窗
+  hideEditDiscNameModal() {
+    this.setData({
+      showDiscNameModal: false,
+      newDiscName: '',
+      canSubmitDiscName: false
+    })
+  },
+
+  // 阻止事件冒泡
+  stopPropagation() {
+    // 空函数，用于阻止点击弹窗内容时关闭弹窗
+  },
+
+  // 盘名输入处理
+  onDiscNameInput(e) {
+    const value = e.detail.value.trim()
+    this.setData({
+      newDiscName: value,
+      canSubmitDiscName: this.validateDiscName(value)
+    })
+  },
+
+  // 验证盘名格式
+  validateDiscName(discName) {
+    if (!discName || discName.length < 2) {
+      return false
+    }
+    if (discName.length > 20) {
+      return false
+    }
+    // 检查是否与当前盘名相同
+    if (discName === this.data.userInfo.discName) {
+      return false
+    }
+    // 简单的字符验证（中文、英文、数字）
+    const regex = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/
+    return regex.test(discName)
+  },
+
+  // 确认修改盘名
+  async confirmDiscNameChange() {
+    const { newDiscName, isSubmittingDiscName, canSubmitDiscName } = this.data
+
+    if (isSubmittingDiscName || !canSubmitDiscName) {
+      return
+    }
+
+    this.setData({ isSubmittingDiscName: true })
+
+    try {
+      const result = await wx.cloud.callFunction({
+        name: 'user_service',
+        data: {
+          action: 'updateDiscName',
+          newDiscName: newDiscName
+        }
+      })
+
+      if (result.result.success) {
+        // 更新本地用户信息
+        const updatedUserInfo = {
+          ...this.data.userInfo,
+          discName: result.result.data.newDiscName
+        }
+
+        wx.setStorageSync('userInfo', updatedUserInfo)
+
+        this.setData({
+          userInfo: updatedUserInfo,
+          discNameInfo: {
+            ...this.data.discNameInfo,
+            remainingChanges: result.result.data.remainingChanges,
+            canChange: result.result.data.remainingChanges > 0
+          }
+        })
+
+        wx.showToast({
+          title: '修改成功',
+          icon: 'success'
+        })
+
+        // 关闭弹窗
+        this.hideEditDiscNameModal()
+
+      } else {
+        throw new Error(result.result.message)
+      }
+    } catch (error) {
+      console.error('修改盘名失败:', error)
+      wx.showToast({
+        title: error.message || '修改失败',
+        icon: 'error'
+      })
+    } finally {
+      this.setData({ isSubmittingDiscName: false })
+    }
   },
 
   // 选择头像
