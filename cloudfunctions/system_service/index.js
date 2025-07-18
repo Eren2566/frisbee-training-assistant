@@ -44,7 +44,7 @@ const initDatabase = async () => {
  * 创建数据库集合
  */
 const createCollections = async () => {
-  const collections = ['Users', 'Events', 'Registrations', 'ErrorLogs', 'SecurityLogs']
+  const collections = ['Users', 'Events', 'Registrations', 'ErrorLogs', 'SecurityLogs', 'EventLogs']
 
   for (const collectionName of collections) {
     try {
@@ -333,6 +333,8 @@ exports.main = async (event, context) => {
         return await getSystemLogs(event.options)
       case 'createTestUsers':
         return await createTestUsers()
+      case 'getEventLogs':
+        return await getEventLogs(event)
       default:
         return {
           success: false,
@@ -844,6 +846,49 @@ async function createTestUsers() {
     return {
       success: false,
       message: '创建测试用户失败',
+      error: error.message
+    }
+  }
+}
+
+/**
+ * 获取事件操作日志
+ */
+const getEventLogs = async (event) => {
+  try {
+    const { limit = 10, eventId, action } = event
+
+    let query = db.collection('EventLogs')
+
+    // 如果指定了事件ID，只查询该事件的日志
+    if (eventId) {
+      query = query.where({
+        eventId: eventId
+      })
+    }
+
+    // 如果指定了操作类型，只查询该类型的日志
+    if (action) {
+      query = query.where({
+        action: action
+      })
+    }
+
+    const result = await query
+      .orderBy('operationTime', 'desc')
+      .limit(limit)
+      .get()
+
+    return {
+      success: true,
+      data: result.data,
+      message: `获取到${result.data.length}条事件日志`
+    }
+  } catch (error) {
+    console.error('获取事件日志失败:', error)
+    return {
+      success: false,
+      message: '获取事件日志失败',
       error: error.message
     }
   }

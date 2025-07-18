@@ -103,7 +103,16 @@
 
   <!-- 管理员报名管理区域 -->
   <view class="card admin-panel" wx:if="{{isAdmin}}">
-    <text class="section-title">报名管理</text>
+    <view class="admin-header">
+      <text class="section-title">报名管理</text>
+      <button
+        class="btn-danger btn-mini delete-event-btn"
+        bindtap="showDeleteConfirm"
+        wx:if="{{canDeleteEvent}}"
+      >
+        删除训练
+      </button>
+    </view>
     
     <!-- 报名统计 -->
     <view class="registration-stats">
@@ -162,6 +171,177 @@
     <!-- 空状态 -->
     <view class="empty-registration" wx:else>
       <text class="empty-text">暂无报名记录</text>
+    </view>
+  </view>
+
+  <!-- 删除训练确认弹窗 -->
+  <view class="modal-overlay" wx:if="{{showDeleteModal}}" bindtap="hideDeleteModal">
+    <view class="modal-content delete-modal" catchtap="stopPropagation">
+      <!-- 弹窗头部 -->
+      <view class="modal-header delete-header">
+        <view class="header-icon">
+          <text class="delete-icon">🗑️</text>
+        </view>
+        <view class="header-text">
+          <text class="modal-title">删除训练确认</text>
+          <text class="modal-subtitle">此操作不可撤销，请谨慎操作</text>
+        </view>
+        <text class="modal-close" bindtap="hideDeleteModal">×</text>
+      </view>
+
+      <view class="modal-body">
+        <!-- 警告提示区域 -->
+        <view class="warning-section">
+          <view class="warning-badge">
+            <text class="warning-icon">⚠️</text>
+            <text class="warning-text">确定要删除这个训练活动吗？</text>
+          </view>
+        </view>
+
+        <!-- 训练信息卡片 -->
+        <view class="event-info-card">
+          <view class="event-basic-info">
+            <view class="info-row">
+              <text class="info-label">训练名称</text>
+              <text class="info-value">{{eventDetail.title}}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">训练时间</text>
+              <text class="info-value">{{eventDetail.formattedTime}}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">训练地点</text>
+              <text class="info-value">{{eventDetail.location}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 报名影响统计 -->
+        <view class="impact-section" wx:if="{{registrationStats.total > 0}}">
+          <view class="section-header">
+            <text class="section-title">删除影响</text>
+            <text class="total-count">共 {{registrationStats.total}} 人</text>
+          </view>
+
+          <view class="stats-grid">
+            <view class="stat-item" wx:if="{{registrationStats.signedUp > 0}}">
+              <view class="stat-icon signed-up">👥</view>
+              <view class="stat-info">
+                <text class="stat-number">{{registrationStats.signedUp}}</text>
+                <text class="stat-label">已报名</text>
+              </view>
+            </view>
+
+            <view class="stat-item" wx:if="{{registrationStats.leaveRequested > 0}}">
+              <view class="stat-icon leave-requested">🏠</view>
+              <view class="stat-info">
+                <text class="stat-number">{{registrationStats.leaveRequested}}</text>
+                <text class="stat-label">已请假</text>
+              </view>
+            </view>
+
+            <view class="stat-item" wx:if="{{registrationStats.present > 0}}">
+              <view class="stat-icon present">✅</view>
+              <view class="stat-info">
+                <text class="stat-number">{{registrationStats.present}}</text>
+                <text class="stat-label">已出勤</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="impact-notice">
+            <text class="notice-text">删除后将自动通知所有报名用户</text>
+          </view>
+        </view>
+
+        <!-- 时间限制提醒 -->
+        <view class="time-limit-section">
+          <view class="limit-badge">
+            <text class="limit-icon">⏰</text>
+            <text class="limit-text">训练开始前2小时内将无法删除</text>
+          </view>
+        </view>
+
+        <!-- 删除原因输入区域 -->
+        <view class="delete-reason-section">
+          <view class="reason-header">
+            <text class="reason-label">删除原因</text>
+            <text class="reason-optional">（可选）</text>
+          </view>
+
+          <!-- 预设原因选项 -->
+          <view class="reason-presets">
+            <view
+              class="preset-item {{deleteReason === '天气原因取消' ? 'active' : ''}}"
+              bindtap="selectPresetReason"
+              data-reason="天气原因取消"
+            >
+              <text class="preset-text">天气原因</text>
+            </view>
+            <view
+              class="preset-item {{deleteReason === '场地问题取消' ? 'active' : ''}}"
+              bindtap="selectPresetReason"
+              data-reason="场地问题取消"
+            >
+              <text class="preset-text">场地问题</text>
+            </view>
+            <view
+              class="preset-item {{deleteReason === '人数不足取消' ? 'active' : ''}}"
+              bindtap="selectPresetReason"
+              data-reason="人数不足取消"
+            >
+              <text class="preset-text">人数不足</text>
+            </view>
+            <view
+              class="preset-item {{deleteReason === '临时调整取消' ? 'active' : ''}}"
+              bindtap="selectPresetReason"
+              data-reason="临时调整取消"
+            >
+              <text class="preset-text">临时调整</text>
+            </view>
+          </view>
+
+          <!-- 自定义原因输入 -->
+          <view class="custom-reason">
+            <textarea
+              class="reason-input"
+              placeholder="或输入自定义删除原因..."
+              value="{{deleteReason}}"
+              bindinput="onDeleteReasonInput"
+              maxlength="200"
+              show-confirm-bar="{{false}}"
+            />
+            <view class="char-count">
+              <text class="count-text">{{deleteReason.length}}/200</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 弹窗底部操作区域 -->
+      <view class="modal-footer delete-footer">
+        <view class="footer-buttons">
+          <button class="btn btn-cancel" bindtap="hideDeleteModal">
+            <text class="btn-text">取消</text>
+          </button>
+          <button
+            class="btn btn-danger"
+            bindtap="confirmDeleteEvent"
+            disabled="{{isDeleting}}"
+            loading="{{isDeleting}}"
+          >
+            <view class="btn-content">
+              <text class="btn-icon" wx:if="{{!isDeleting}}">🗑️</text>
+              <text class="btn-text">{{isDeleting ? '删除中...' : '确认删除'}}</text>
+            </view>
+          </button>
+        </view>
+
+        <!-- 最后确认提示 -->
+        <view class="final-warning" wx:if="{{!isDeleting}}">
+          <text class="warning-text">此操作将永久删除训练活动</text>
+        </view>
+      </view>
     </view>
   </view>
 </view>

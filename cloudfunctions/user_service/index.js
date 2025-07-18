@@ -24,6 +24,12 @@ exports.main = async (event, context) => {
         return await updateDiscName(event, wxContext)
       case 'getDiscNameChangeInfo':
         return await getDiscNameChangeInfo(event, wxContext)
+      case 'upgradeToAdmin':
+        return await upgradeToAdmin(event, wxContext)
+      case 'checkUserRole':
+        return await checkUserRole(event, wxContext)
+      case 'updateUserInfo':
+        return await updateUserInfo(event, wxContext)
       default:
         return {
           success: false,
@@ -411,6 +417,210 @@ async function getDiscNameChangeInfo(event, wxContext) {
     return {
       success: false,
       message: '获取信息失败',
+      error: error.message
+    }
+  }
+}
+
+// 升级用户为管理员（特殊功能，用于解决角色分配问题）
+async function upgradeToAdmin(event, wxContext) {
+  const { targetDiscName, confirmCode } = event
+  const openid = wxContext.OPENID
+
+  try {
+    // 安全验证码（防止误操作）
+    const validCodes = ['FRISBEE_CAPTAIN_2025', 'ADMIN_UPGRADE_CODE']
+    if (!confirmCode || !validCodes.includes(confirmCode)) {
+      return {
+        success: false,
+        message: '验证码错误，无法升级权限'
+      }
+    }
+
+    // 查找目标用户
+    let targetUser = null
+    if (targetDiscName) {
+      // 根据盘名查找用户
+      const userResult = await db.collection('Users').where({
+        discName: targetDiscName
+      }).get()
+
+      if (userResult.data.length === 0) {
+        return {
+          success: false,
+          message: `未找到盘名为"${targetDiscName}"的用户`
+        }
+      }
+      targetUser = userResult.data[0]
+    } else {
+      // 升级当前用户
+      const userResult = await db.collection('Users').where({
+        _openid: openid
+      }).get()
+
+      if (userResult.data.length === 0) {
+        return {
+          success: false,
+          message: '用户不存在'
+        }
+      }
+      targetUser = userResult.data[0]
+    }
+
+    // 检查是否已经是管理员
+    if (targetUser.role === 'admin') {
+      return {
+        success: false,
+        message: `用户"${targetUser.discName || targetUser.nickName}"已经是管理员`
+      }
+    }
+
+    // 升级为管理员
+    await db.collection('Users').doc(targetUser._id).update({
+      data: {
+        role: 'admin',
+        updateTime: new Date(),
+        roleUpgradeTime: new Date(),
+        roleUpgradeBy: openid
+      }
+    })
+
+    console.log(`用户角色升级成功: ${targetUser.discName || targetUser.nickName} -> admin`)
+
+    return {
+      success: true,
+      message: `用户"${targetUser.discName || targetUser.nickName}"已成功升级为管理员`,
+      data: {
+        userId: targetUser._id,
+        discName: targetUser.discName,
+        nickName: targetUser.nickName,
+        oldRole: 'member',
+        newRole: 'admin',
+        upgradeTime: new Date()
+      }
+    }
+  } catch (error) {
+    console.error('升级用户角色失败:', error)
+    return {
+      success: false,
+      message: '升级失败',
+      error: error.message
+    }
+  }
+}
+
+// 检查用户角色信息
+async function checkUserRole(event, wxContext) {
+  const openid = wxContext.OPENID
+
+  try {
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    const user = userResult.data[0]
+
+    return {
+      success: true,
+      data: {
+        userId: user._id,
+        openid: user._openid,
+        nickName: user.nickName,
+        discName: user.discName,
+        role: user.role,
+        isAdmin: user.role === 'admin',
+        isInfoCompleted: user.isInfoCompleted,
+        createTime: user.createTime,
+        updateTime: user.updateTime,
+        roleUpgradeTime: user.roleUpgradeTime || null
+      },
+      message: '用户角色信息获取成功'
+    }
+  } catch (error) {
+    console.error('检查用户角色失败:', error)
+    return {
+      success: false,
+      message: '检查失败',
+      error: error.message
+    }
+  }
+}
+
+// 更新用户信息（包括角色）
+async function updateUserInfo(event, wxContext) {
+  const { discName, role, confirmCode } = event
+  const openid = wxContext.OPENID
+
+  try {
+    // 如果要修改角色，需要验证码
+    if (role && role === 'admin') {
+      const validCodes = ['FRISBEE_CAPTAIN_2025', 'ADMIN_UPGRADE_CODE']
+      if (!confirmCode || !validCodes.includes(confirmCode)) {
+        return {
+          success: false,
+          message: '修改管理员角色需要验证码'
+        }
+      }
+    }
+
+    // 获取当前用户信息
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    const currentUser = userResult.data[0]
+    const updateData = {
+      updateTime: new Date()
+    }
+
+    // 更新盘名
+    if (discName && discName !== currentUser.discName) {
+      updateData.discName = discName
+      console.log(`更新用户盘名: ${currentUser.discName} -> ${discName}`)
+    }
+
+    // 更新角色
+    if (role && role !== currentUser.role) {
+      updateData.role = role
+      updateData.roleUpgradeTime = new Date()
+      updateData.roleUpgradeBy = openid
+      console.log(`更新用户角色: ${currentUser.role} -> ${role}`)
+    }
+
+    // 执行更新
+    await db.collection('Users').doc(currentUser._id).update({
+      data: updateData
+    })
+
+    // 获取更新后的用户信息
+    const updatedUserResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    return {
+      success: true,
+      data: updatedUserResult.data[0],
+      message: '用户信息更新成功'
+    }
+  } catch (error) {
+    console.error('更新用户信息失败:', error)
+    return {
+      success: false,
+      message: '更新失败',
       error: error.message
     }
   }

@@ -20,6 +20,8 @@ exports.main = async (event, context) => {
         return await getEventList(event, wxContext)
       case 'getDetail':
         return await getEventDetail(event, wxContext)
+      case 'delete':
+        return await deleteEvent(event, wxContext)
       default:
         return {
           success: false,
@@ -65,6 +67,11 @@ async function createEvent(event, wxContext) {
         content,
         notes: notes || '',
         status: 'registering',
+        // 软删除相关字段
+        isDeleted: false,
+        deleteTime: null,
+        deletedBy: null,
+        deleteReason: null,
         createTime: new Date(),
         updateTime: new Date()
       }
@@ -91,6 +98,9 @@ async function createEvent(event, wxContext) {
 async function getEventList(event, wxContext) {
   try {
     const result = await db.collection('Events')
+      .where({
+        isDeleted: false  // 只获取未删除的训练
+      })
       .orderBy('eventTime', 'desc')
       .get()
 
@@ -193,6 +203,208 @@ async function getEventDetail(event, wxContext) {
     return {
       success: false,
       message: '获取训练详情失败',
+      error: error.message
+    }
+  }
+}
+
+// 删除训练活动（软删除）
+async function deleteEvent(event, wxContext) {
+  const { eventId, deleteReason } = event
+  const openid = wxContext.OPENID
+
+  try {
+
+    // 验证参数
+    if (!eventId) {
+      return {
+        success: false,
+        message: '训练ID不能为空'
+      }
+    }
+
+    if (!openid) {
+      return {
+        success: false,
+        message: '用户身份验证失败'
+      }
+    }
+
+    // 获取训练详情
+    const eventResult = await db.collection('Events').doc(eventId).get()
+
+    if (!eventResult.data) {
+      return {
+        success: false,
+        message: '训练不存在'
+      }
+    }
+
+    const eventData = eventResult.data
+
+    // 检查训练是否已被删除
+    if (eventData.isDeleted) {
+      return {
+        success: false,
+        message: '训练已被删除'
+      }
+    }
+
+    // 权限验证：只有管理员或创建者可以删除
+    const userResult = await db.collection('Users').where({
+      _openid: openid
+    }).get()
+
+    if (userResult.data.length === 0) {
+      return {
+        success: false,
+        message: '用户不存在'
+      }
+    }
+
+    const user = userResult.data[0]
+    const isAdmin = user.role === 'admin'
+    const isCreator = eventData.creatorId === openid
+
+    if (!isAdmin && !isCreator) {
+      return {
+        success: false,
+        message: '权限不足，只有管理员或创建者可以删除训练'
+      }
+    }
+
+    // 时间限制检查：训练开始前2小时不能删除
+    const eventTime = new Date(eventData.eventTime)
+    const now = new Date()
+    const timeDiff = eventTime.getTime() - now.getTime()
+    const hoursUntilEvent = timeDiff / (1000 * 60 * 60)
+    const minutesUntilEvent = timeDiff / (1000 * 60)
+
+    // 如果训练已经开始，不能删除
+    if (timeDiff <= 0) {
+      return {
+        success: false,
+        message: '训练已经开始或结束，不能删除'
+      }
+    }
+
+    // 如果距离训练开始不足2小时，不能删除
+    if (hoursUntilEvent <= 2) {
+      const remainingTime = minutesUntilEvent > 60 ?
+        `${Math.floor(hoursUntilEvent)}小时${Math.floor(minutesUntilEvent % 60)}分钟` :
+        `${Math.floor(minutesUntilEvent)}分钟`
+
+      return {
+        success: false,
+        message: `距离训练开始仅剩${remainingTime}，不能删除训练`
+      }
+    }
+
+    // 检查报名情况和删除影响
+    const registrationResult = await db.collection('Registrations').where({
+      eventId: eventId
+    }).get()
+
+    const registrations = registrationResult.data
+    const registrationCount = registrations.length
+
+    // 统计不同状态的报名数量
+    const registrationStats = {
+      total: registrationCount,
+      signedUp: registrations.filter(r => r.status === 'signed_up').length,
+      leaveRequested: registrations.filter(r => r.status === 'leave_requested').length,
+      present: registrations.filter(r => r.status === 'present').length,
+      absent: registrations.filter(r => r.status === 'absent').length
+    }
+
+    // 如果有用户已经出勤，需要特别提醒
+    if (registrationStats.present > 0) {
+      return {
+        success: false,
+        message: `已有${registrationStats.present}人确认出勤，不能删除训练`
+      }
+    }
+
+    // 准备删除数据
+    const deleteTime = new Date()
+    const finalDeleteReason = deleteReason || '管理员删除'
+
+    // 执行软删除
+    await db.collection('Events').doc(eventId).update({
+      data: {
+        isDeleted: true,
+        deleteTime: deleteTime,
+        deletedBy: openid,
+        deleteReason: finalDeleteReason,
+        updateTime: deleteTime
+      }
+    })
+
+    // 标记相关报名记录为已取消（如果有报名记录）
+    if (registrationCount > 0) {
+      try {
+        // 批量更新报名记录状态
+        const batch = db.collection('Registrations').where({
+          eventId: eventId
+        })
+
+        await batch.update({
+          data: {
+            status: 'cancelled',
+            cancelTime: deleteTime,
+            cancelReason: '训练已被删除',
+            updateTime: deleteTime
+          }
+        })
+
+        console.log(`已标记${registrationCount}条报名记录为已取消`)
+      } catch (updateError) {
+        console.error('更新报名记录状态失败:', updateError)
+        // 不影响删除操作的成功
+      }
+    }
+
+    // 记录删除操作日志
+    try {
+      await db.collection('EventLogs').add({
+        data: {
+          eventId: eventId,
+          action: 'delete',
+          operatorId: openid,
+          operatorRole: user.role,
+          eventTitle: eventData.title,
+          eventTime: eventData.eventTime,
+          deleteReason: finalDeleteReason,
+          affectedRegistrations: registrationStats,
+          operationTime: deleteTime,
+          ipAddress: wxContext.CLIENTIP || 'unknown',
+          userAgent: wxContext.CLIENTIPV6 || 'unknown'
+        }
+      })
+    } catch (logError) {
+      console.error('记录删除日志失败:', logError)
+      // 日志记录失败不影响删除操作
+    }
+
+    return {
+      success: true,
+      message: '训练删除成功',
+      data: {
+        eventId: eventId,
+        eventTitle: eventData.title,
+        deleteTime: deleteTime,
+        deletedBy: openid,
+        deleteReason: finalDeleteReason,
+        affectedUsers: registrationStats.total,
+        registrationStats: registrationStats,
+        notificationRequired: registrationStats.total > 0
+      }
+    }
+  } catch (error) {
+    console.error('删除训练失败:', error)
+    return {
+      success: false,
+      message: '删除训练失败',
       error: error.message
     }
   }

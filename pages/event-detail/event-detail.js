@@ -18,7 +18,12 @@ Page({
     },
     hasSignedUpUsers: false, // 是否有已报名用户
     isLoading: false,
-    isRegistering: false
+    isRegistering: false,
+    // 删除相关
+    canDeleteEvent: false,
+    showDeleteModal: false,
+    deleteReason: '',
+    isDeleting: false
   },
 
   onLoad(options) {
@@ -87,7 +92,8 @@ Page({
           }
 
           this.setData({
-            eventDetail: eventDetail
+            eventDetail: eventDetail,
+            canDeleteEvent: this.checkDeletePermission(eventDetail)
           })
         } else {
           app.showError(res.result.message || '获取训练详情失败')
@@ -265,5 +271,188 @@ Page({
       'absent': '缺勤'
     }
     return statusMap[status] || '未知状态'
+  },
+
+  // 检查删除权限
+  checkDeletePermission(eventDetail) {
+    const { userInfo } = this.data
+
+    if (!userInfo || !userInfo._openid || !eventDetail) {
+      return false
+    }
+
+    // 只有管理员或创建者可以删除
+    const isAdmin = userInfo.role === 'admin'
+    const isCreator = eventDetail.creatorId === userInfo._openid
+
+    if (!isAdmin && !isCreator) {
+      return false
+    }
+
+    // 检查时间限制：训练开始前2小时不能删除
+    const eventTime = new Date(eventDetail.eventTime)
+    const now = new Date()
+    const timeDiff = eventTime.getTime() - now.getTime()
+    const hoursUntilEvent = timeDiff / (1000 * 60 * 60)
+
+    // 如果训练已经开始，不能删除
+    if (timeDiff <= 0) {
+      return false
+    }
+
+    // 如果距离训练开始不足2小时，不能删除
+    if (hoursUntilEvent <= 2) {
+      return false
+    }
+
+    // 如果训练已经结束，不能删除
+    if (eventDetail.status === 'finished') {
+      return false
+    }
+
+    return true
+  },
+
+  // 获取删除限制原因
+  getDeleteRestrictionReason(eventDetail) {
+    const { userInfo } = this.data
+
+    if (!userInfo || !eventDetail) {
+      return '无法获取训练信息'
+    }
+
+    // 检查权限
+    const isAdmin = userInfo.role === 'admin'
+    const isCreator = eventDetail.creatorId === userInfo._openid
+
+    if (!isAdmin && !isCreator) {
+      return '只有管理员或训练创建者可以删除训练'
+    }
+
+    // 检查时间限制
+    const eventTime = new Date(eventDetail.eventTime)
+    const now = new Date()
+    const timeDiff = eventTime.getTime() - now.getTime()
+    const hoursUntilEvent = timeDiff / (1000 * 60 * 60)
+    const minutesUntilEvent = timeDiff / (1000 * 60)
+
+    if (timeDiff <= 0) {
+      return '训练已经开始或结束，不能删除'
+    }
+
+    if (hoursUntilEvent <= 2) {
+      const remainingTime = minutesUntilEvent > 60 ?
+        `${Math.floor(hoursUntilEvent)}小时${Math.floor(minutesUntilEvent % 60)}分钟` :
+        `${Math.floor(minutesUntilEvent)}分钟`
+      return `距离训练开始仅剩${remainingTime}，不能删除`
+    }
+
+    if (eventDetail.status === 'finished') {
+      return '训练已结束，不能删除'
+    }
+
+    return null
+  },
+
+  // 显示删除确认弹窗
+  showDeleteConfirm() {
+    const { eventDetail } = this.data
+
+    // 再次检查删除权限
+    if (!this.checkDeletePermission(eventDetail)) {
+      const reason = this.getDeleteRestrictionReason(eventDetail)
+      app.showError(reason || '无法删除此训练')
+      return
+    }
+
+    // 检查是否有用户已出勤
+    const { registrationStats } = this.data
+    if (registrationStats.present > 0) {
+      app.showError(`已有${registrationStats.present}人确认出勤，不能删除训练`)
+      return
+    }
+
+    this.setData({
+      showDeleteModal: true,
+      deleteReason: ''
+    })
+  },
+
+  // 隐藏删除确认弹窗
+  hideDeleteModal() {
+    this.setData({
+      showDeleteModal: false,
+      deleteReason: ''
+    })
+  },
+
+  // 阻止事件冒泡
+  stopPropagation() {
+    // 空函数，用于阻止点击弹窗内容时关闭弹窗
+  },
+
+  // 删除原因输入
+  onDeleteReasonInput(e) {
+    this.setData({
+      deleteReason: e.detail.value
+    })
+  },
+
+  // 选择预设删除原因
+  selectPresetReason(e) {
+    const reason = e.currentTarget.dataset.reason
+    this.setData({
+      deleteReason: reason
+    })
+  },
+
+  // 确认删除训练
+  confirmDeleteEvent() {
+    const { eventId, deleteReason, isDeleting } = this.data
+
+    if (isDeleting) {
+      return
+    }
+
+    this.setData({ isDeleting: true })
+
+    wx.cloud.callFunction({
+      name: 'event_service',
+      data: {
+        action: 'delete',
+        eventId: eventId,
+        deleteReason: deleteReason || '管理员删除'
+      },
+      success: (res) => {
+        if (res.result.success) {
+          const result = res.result.data
+          let successMessage = '训练删除成功'
+
+          // 根据删除结果显示详细信息
+          if (result.affectedUsers > 0) {
+            successMessage += `，已通知${result.affectedUsers}名报名用户`
+          }
+
+          app.showSuccess(successMessage)
+
+          // 延迟返回，让用户看到成功提示
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 2000)
+        } else {
+          app.showError(res.result.message || '删除失败')
+        }
+      },
+      fail: (err) => {
+        console.error('删除训练失败:', err)
+        app.showError('删除失败，请重试')
+      },
+      complete: () => {
+        this.setData({
+          isDeleting: false,
+          showDeleteModal: false
+        })
+      }
+    })
   }
 })
