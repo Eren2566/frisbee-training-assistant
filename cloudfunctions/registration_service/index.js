@@ -137,20 +137,23 @@ async function getMyRegistrationList(event, wxContext) {
       userId: openid
     }).get()
 
-    // 获取对应的训练信息
+    // 获取对应的训练信息，只获取未删除的训练
     const eventIds = result.data.map(item => item.eventId)
     const eventResult = await db.collection('Events').where({
-      _id: db.command.in(eventIds)
+      _id: db.command.in(eventIds),
+      isDeleted: db.command.neq(true) // 过滤掉已删除的训练
     }).get()
 
-    // 合并数据
-    const myList = result.data.map(registration => {
-      const eventInfo = eventResult.data.find(e => e._id === registration.eventId)
-      return {
-        ...registration,
-        eventInfo
-      }
-    })
+    // 合并数据，只保留训练信息存在的记录（即未删除的训练）
+    const myList = result.data
+      .map(registration => {
+        const eventInfo = eventResult.data.find(e => e._id === registration.eventId)
+        return {
+          ...registration,
+          eventInfo
+        }
+      })
+      .filter(item => item.eventInfo) // 过滤掉训练信息不存在的记录（已删除的训练）
 
     return {
       success: true,

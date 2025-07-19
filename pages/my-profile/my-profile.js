@@ -86,8 +86,17 @@ Page({
         
         if (res.result.success) {
           const registrations = res.result.data
+          // 格式化时间显示
+          const formattedRegistrations = registrations.map(registration => ({
+            ...registration,
+            eventInfo: {
+              ...registration.eventInfo,
+              formattedTime: this.formatTime(registration.eventInfo.eventTime)
+            }
+          }))
+
           this.setData({
-            myRegistrations: registrations
+            myRegistrations: formattedRegistrations
           })
           this.calculateStats(registrations)
         } else {

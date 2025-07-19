@@ -120,7 +120,7 @@
           <view class="registration-info">
             <view class="info-item">
               <text class="info-icon icon icon-time icon-secondary icon-sm"></text>
-              <text class="info-text">{{item.eventInfo.eventTime}}</text>
+              <text class="info-text">{{item.eventInfo.formattedTime}}</text>
             </view>
             <view class="info-item">
               <text class="info-icon icon icon-location icon-secondary icon-sm"></text>
