@@ -1,0 +1,20 @@
+{
+  "name": "notification_service",
+  "version": "1.0.0",
+  "description": "飞盘队训练助手 - 通知服务云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "notification",
+    "frisbee"
+  ],
+  "author": "Frisbee Team",
+  "license": "MIT"
+}

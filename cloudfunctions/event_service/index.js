@@ -386,6 +386,37 @@ async function deleteEvent(event, wxContext) {
       // 日志记录失败不影响删除操作
     }
 
+    // 发送删除通知给受影响的用户
+    let notificationResult = null
+    if (registrationStats.total > 0) {
+      try {
+        // 获取需要通知的用户信息
+        const affectedUserIds = registrations.map(r => r.userId)
+        const affectedUsersResult = await db.collection('Users').where({
+          _id: db.command.in(affectedUserIds)
+        }).get()
+
+        if (affectedUsersResult.data.length > 0) {
+          // 调用通知服务发送批量通知
+          notificationResult = await cloud.callFunction({
+            name: 'notification_service',
+            data: {
+              action: 'sendBatchEventDeletedNotifications',
+              users: affectedUsersResult.data,
+              event: eventData,
+              operator: user,
+              deleteReason: finalDeleteReason
+            }
+          })
+
+          console.log('通知发送结果:', notificationResult.result)
+        }
+      } catch (notificationError) {
+        console.error('发送删除通知失败:', notificationError)
+        // 通知发送失败不影响删除操作的成功
+      }
+    }
+
     return {
       success: true,
       message: '训练删除成功',
@@ -397,7 +428,8 @@ async function deleteEvent(event, wxContext) {
         deleteReason: finalDeleteReason,
         affectedUsers: registrationStats.total,
         registrationStats: registrationStats,
-        notificationRequired: registrationStats.total > 0
+        notificationRequired: registrationStats.total > 0,
+        notificationResult: notificationResult?.result || null
       }
     }
   } catch (error) {
