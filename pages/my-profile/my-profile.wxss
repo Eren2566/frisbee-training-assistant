@@ -598,13 +598,6 @@
   margin-bottom: var(--spacing-md);
 }
 
-.status-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-sm);
-}
-
 .event-title {
   font-size: 32rpx;
   font-weight: 700;
@@ -644,28 +637,33 @@
 
 /* 打卡按钮样式 */
 .check-in-button-container {
-  margin-top: var(--spacing-xs);
-  width: fit-content;
-  min-width: 120rpx; /* 稍微大于"已报名"状态的宽度 */
+  margin-left: var(--spacing-md); /* 与左侧内容保持间距 */
+  width: auto;
+  max-width: 120rpx;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0; /* 防止被压缩 */
 }
 
 .check-in-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6rpx;
-  padding: 10rpx 16rpx; /* 减小内边距 */
-  background: linear-gradient(135deg, #00C851 0%, #007E33 50%, #00C851 100%); /* 增强渐变对比度 */
+  gap: 8rpx; /* 减小间距 */
+  padding: 8rpx 14rpx; /* 减小内边距，更紧凑 */
+  background: linear-gradient(135deg, #00C851 0%, #007E33 50%, #00C851 100%);
   color: white;
   border: none;
-  border-radius: 40rpx; /* 稍微减小圆角 */
-  font-size: 22rpx; /* 稍微减小字体 */
+  border-radius: 32rpx; /* 减小圆角 */
+  font-size: 20rpx; /* 减小字体 */
   font-weight: 600;
-  box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0.3);
+  box-shadow: 0 3rpx 12rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0.3);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  min-width: 100rpx; /* 设置最小宽度 */
+  width: auto;
+  max-width: 110rpx; /* 进一步限制宽度 */
+  white-space: nowrap;
   animation: checkInBreathing 2.5s ease-in-out infinite, checkInRipple 3s ease-in-out infinite;
 }
 
@@ -705,13 +703,13 @@
 }
 
 .check-in-icon {
-  font-size: 24rpx; /* 减小图标尺寸 */
+  font-size: 24rpx; /* 进一步减小图标尺寸 */
   font-weight: bold;
   line-height: 1;
 }
 
 .check-in-text {
-  font-size: 22rpx; /* 减小文字尺寸 */
+  font-size: 23rpx; /* 进一步减小文字尺寸 */
   font-weight: 600;
 }
 
@@ -798,6 +796,20 @@
   display: flex;
   align-items: center;
   margin-bottom: 8rpx;
+}
+
+/* 带按钮的信息行样式 */
+.info-item-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.info-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .info-icon {
@@ -938,9 +950,37 @@
 
   /* 小屏幕下的打卡按钮优化 */
   .check-in-button {
-    padding: 8rpx 14rpx;
-    font-size: 20rpx;
-    min-width: 90rpx;
+    padding: 6rpx 12rpx; /* 小屏幕下更紧凑 */
+    font-size: 18rpx;
+    max-width: 90rpx;
+    gap: 3rpx;
+  }
+
+  .check-in-button-container {
+    max-width: 95rpx;
+    margin-left: var(--spacing-sm); /* 小屏幕下减小间距 */
+  }
+
+  .check-in-icon {
+    font-size: 18rpx;
+  }
+
+  .check-in-text {
+    font-size: 18rpx;
+  }
+}
+
+/* 大屏幕优化 */
+@media (min-width: 1200rpx) {
+  .check-in-button {
+    padding: 10rpx 16rpx;
+    font-size: 22rpx;
+    max-width: 110rpx;
+    gap: 5rpx;
+  }
+
+  .check-in-button-container {
+    max-width: 120rpx;
   }
 
   .check-in-icon {
@@ -948,23 +988,6 @@
   }
 
   .check-in-text {
-    font-size: 20rpx;
-  }
-}
-
-/* 大屏幕优化 */
-@media (min-width: 1200rpx) {
-  .check-in-button {
-    padding: 12rpx 18rpx;
-    font-size: 24rpx;
-    min-width: 110rpx;
-  }
-
-  .check-in-icon {
-    font-size: 26rpx;
-  }
-
-  .check-in-text {
-    font-size: 24rpx;
+    font-size: 22rpx;
   }
 }
