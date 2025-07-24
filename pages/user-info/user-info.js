@@ -36,8 +36,8 @@ Page({
         content: '请先登录',
         showCancel: false,
         success: () => {
-          wx.redirectTo({
-            url: '/pages/login/login'
+          wx.switchTab({
+            url: '/pages/index/index'
           })
         }
       })

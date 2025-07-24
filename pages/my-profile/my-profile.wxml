@@ -96,8 +96,8 @@
       </view>
 
       <!-- 空状态 -->
-      <view class="empty-state-enhanced" wx:elif="{{myRegistrations.length === 0}}">
-        <view class="empty-state-icon icon icon-edit icon-gradient"></view>
+      <view class="empty-state" wx:elif="{{myRegistrations.length === 0}}">
+        <view class="empty-icon">📅</view>
         <text class="empty-text">暂无训练记录</text>
         <text class="empty-desc">参加训练后这里会显示您的出勤记录</text>
       </view>
