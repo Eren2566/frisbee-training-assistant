@@ -263,13 +263,15 @@ page {
 
 .form-input {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: 32rpx var(--spacing-md);
   border: 2rpx solid var(--gray-300);
   border-radius: var(--radius-md);
   font-size: 28rpx;
+  line-height: 1.5;
   box-sizing: border-box;
   transition: all 0.3s ease;
   background-color: #ffffff;
+  min-height: 88rpx;
 }
 
 .form-input:focus {
@@ -280,10 +282,11 @@ page {
 
 .form-textarea {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: 32rpx var(--spacing-md);
   border: 2rpx solid var(--gray-300);
   border-radius: var(--radius-md);
   font-size: 28rpx;
+  line-height: 1.5;
   min-height: 200rpx;
   box-sizing: border-box;
   transition: all 0.3s ease;
@@ -1082,5 +1085,20 @@ page {
 
   .page {
     padding: var(--spacing-sm);
+  }
+
+  /* 移动端输入框优化 */
+  .form-input, .form-textarea {
+    padding: 36rpx var(--spacing-md);
+    font-size: 30rpx;
+    line-height: 1.6;
+    min-height: 96rpx;
+  }
+
+  .modal-input {
+    padding: 36rpx 24rpx;
+    font-size: 30rpx;
+    line-height: 1.6;
+    min-height: 96rpx;
   }
 }
