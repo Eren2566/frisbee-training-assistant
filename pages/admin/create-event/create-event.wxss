@@ -111,6 +111,9 @@
   background-color: white;
   box-shadow: 0 0 0 4rpx rgba(255, 107, 53, 0.1), inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
   outline: none;
+  padding: 36rpx var(--spacing-md);
+  line-height: 1.6;
+  min-height: 96rpx;
 }
 
 .form-textarea {
@@ -366,6 +369,13 @@
   }
 
   .form-input, .form-textarea {
+    padding: 36rpx var(--spacing-md);
+    font-size: 28rpx;
+    line-height: 1.6;
+    min-height: 96rpx;
+  }
+
+  .form-input:focus, .form-textarea:focus {
     padding: 36rpx var(--spacing-md);
     font-size: 28rpx;
     line-height: 1.6;

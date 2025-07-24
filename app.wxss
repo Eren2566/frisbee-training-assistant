@@ -278,6 +278,9 @@ page {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 4rpx rgba(255, 107, 53, 0.1);
   outline: none;
+  padding: 32rpx var(--spacing-md);
+  line-height: 1.5;
+  min-height: 88rpx;
 }
 
 .form-textarea {
@@ -298,6 +301,9 @@ page {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 4rpx rgba(255, 107, 53, 0.1);
   outline: none;
+  padding: 32rpx var(--spacing-md);
+  line-height: 1.5;
+  min-height: 200rpx;
 }
 
 /* ==========================================
@@ -1095,7 +1101,21 @@ page {
     min-height: 96rpx;
   }
 
+  .form-input:focus, .form-textarea:focus {
+    padding: 36rpx var(--spacing-md);
+    font-size: 30rpx;
+    line-height: 1.6;
+    min-height: 96rpx;
+  }
+
   .modal-input {
+    padding: 36rpx 24rpx;
+    font-size: 30rpx;
+    line-height: 1.6;
+    min-height: 96rpx;
+  }
+
+  .modal-input:focus {
     padding: 36rpx 24rpx;
     font-size: 30rpx;
     line-height: 1.6;
