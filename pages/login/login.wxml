@@ -26,14 +26,6 @@
       >
         {{isLoading ? '登录中...' : '微信授权登录'}}
       </button>
-
-      <button
-        class="btn-secondary quick-login-btn btn-touch mobile-bounce-in delay-300 touch-optimized gpu-accelerated"
-        bindtap="quickLogin"
-        disabled="{{isLoading}}"
-      >
-        快速登录
-      </button>
     </view>
 
     <!-- 功能说明 -->

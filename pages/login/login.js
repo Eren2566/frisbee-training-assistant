@@ -99,17 +99,5 @@ Page({
     })
   },
 
-  // 快速登录（不获取用户信息）
-  quickLogin() {
-    if (this.data.isLoading) return
-    
-    this.setData({
-      isLoading: true
-    })
 
-    this.loginWithUserInfo({
-      nickName: '微信用户',
-      avatarUrl: ''
-    })
-  }
 })

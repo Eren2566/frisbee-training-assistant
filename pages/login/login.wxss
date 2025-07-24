@@ -129,12 +129,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-.quick-login-btn {
-  font-size: 30rpx;
-  font-weight: 500;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-md);
-}
+
 
 /* ==========================================
    功能特色展示

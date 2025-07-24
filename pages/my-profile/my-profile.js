@@ -61,10 +61,10 @@ Page({
     return userInfo.avatarUrl || ''
   },
 
-  // 跳转到登录页面
+  // 跳转到首页进行登录
   goToLogin() {
-    wx.navigateTo({
-      url: '/pages/login/login'
+    wx.switchTab({
+      url: '/pages/index/index'
     })
   },
 
