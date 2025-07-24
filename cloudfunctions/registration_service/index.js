@@ -47,36 +47,50 @@ async function registerForEvent(event, wxContext) {
   const openid = testUserId || wxContext.OPENID
 
   try {
-    // 检查是否已经报名
+    // 检查是否已经有记录
     const existingResult = await db.collection('Registrations').where({
       eventId,
       userId: openid
     }).get()
 
     if (existingResult.data.length > 0) {
+      // 已有记录，允许状态切换
+      const existingRecord = existingResult.data[0]
+
+      // 更新现有记录的状态（允许在报名和请假之间切换）
+      await db.collection('Registrations').doc(existingRecord._id).update({
+        data: {
+          status, // 'signed_up' 或 'leave_requested'
+          updateTime: new Date()
+        }
+      })
+
       return {
-        success: false,
-        message: '您已经操作过该训练，请勿重复操作'
+        success: true,
+        data: {
+          _id: existingRecord._id
+        },
+        message: status === 'signed_up' ? '报名成功' : '请假成功'
       }
-    }
+    } else {
+      // 没有记录，创建新记录
+      const createResult = await db.collection('Registrations').add({
+        data: {
+          eventId,
+          userId: openid,
+          status, // 'signed_up' 或 'leave_requested'
+          createTime: new Date(),
+          updateTime: new Date()
+        }
+      })
 
-    // 创建报名记录
-    const createResult = await db.collection('Registrations').add({
-      data: {
-        eventId,
-        userId: openid,
-        status, // 'signed_up' 或 'leave_requested'
-        createTime: new Date(),
-        updateTime: new Date()
+      return {
+        success: true,
+        data: {
+          _id: createResult._id
+        },
+        message: status === 'signed_up' ? '报名成功' : '请假成功'
       }
-    })
-
-    return {
-      success: true,
-      data: {
-        _id: createResult._id
-      },
-      message: status === 'signed_up' ? '报名成功' : '请假成功'
     }
   } catch (error) {
     console.error('报名/请假失败:', error)

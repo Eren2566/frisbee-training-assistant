@@ -152,10 +152,19 @@ function callCloudFunction(name, data) {
  */
 function handleError(error, context = 'Unknown', showToUser = true) {
   logger.error('ErrorHandler', `${context} 发生错误`, error)
-  
+
   if (showToUser) {
     const message = error.message || '操作失败，请重试'
-    app.showError(message)
+    if (app && app.showError) {
+      app.showError(message)
+    } else {
+      // 如果app不可用，直接使用wx.showToast
+      wx.showToast({
+        title: message,
+        icon: 'none',
+        duration: 3000
+      })
+    }
   }
 }
 

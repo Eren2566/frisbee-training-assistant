@@ -328,9 +328,19 @@ Page({
       this.loadTrainingData()
     } catch (error) {
       console.error('报名失败:', error)
+
+      // 提供更详细的错误信息
+      let errorMessage = '报名失败'
+      if (error.message) {
+        errorMessage = error.message
+      } else if (typeof error === 'string') {
+        errorMessage = error
+      }
+
       wx.showToast({
-        title: '报名失败',
-        icon: 'none'
+        title: errorMessage,
+        icon: 'none',
+        duration: 3000
       })
     } finally {
       wx.hideLoading()
@@ -355,9 +365,19 @@ Page({
       this.loadTrainingData()
     } catch (error) {
       console.error('请假失败:', error)
+
+      // 提供更详细的错误信息
+      let errorMessage = '请假失败'
+      if (error.message) {
+        errorMessage = error.message
+      } else if (typeof error === 'string') {
+        errorMessage = error
+      }
+
       wx.showToast({
-        title: '请假失败',
-        icon: 'none'
+        title: errorMessage,
+        icon: 'none',
+        duration: 3000
       })
     } finally {
       wx.hideLoading()

@@ -112,10 +112,10 @@
           申请请假
         </button>
 
-        <!-- 已请假用户显示状态 -->
-        <view class="status-text" wx:elif="{{userEventStatus.status === 'leave_requested'}}">
-          <text class="leave-status">已请假</text>
-        </view>
+        <!-- 已请假用户显示重新报名按钮 -->
+        <button class="btn-primary action-btn" wx:elif="{{userEventStatus.status === 'leave_requested'}}" bindtap="handleSignUp">
+          重新报名
+        </button>
 
         <!-- 查看详情按钮 -->
         <button class="btn-secondary action-btn" bindtap="goToEventDetail">
