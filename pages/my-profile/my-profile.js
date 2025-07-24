@@ -100,11 +100,17 @@ Page({
           })
           this.calculateStats(registrations)
         } else {
+          this.setData({
+            myRegistrations: []
+          })
           app.showError(res.result.message || '获取报名记录失败')
         }
       },
       fail: (err) => {
         console.error('获取报名记录失败:', err)
+        this.setData({
+          myRegistrations: []
+        })
         app.showError('获取报名记录失败')
       },
       complete: () => {
