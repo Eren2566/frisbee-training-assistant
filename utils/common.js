@@ -13,14 +13,14 @@ const TimeUtils = {
   format(date, format = 'YYYY-MM-DD HH:mm') {
     const d = new Date(date)
     if (isNaN(d.getTime())) return '无效日期'
-    
+
     const year = d.getFullYear()
     const month = String(d.getMonth() + 1).padStart(2, '0')
     const day = String(d.getDate()).padStart(2, '0')
     const hour = String(d.getHours()).padStart(2, '0')
     const minute = String(d.getMinutes()).padStart(2, '0')
     const second = String(d.getSeconds()).padStart(2, '0')
-    
+
     return format
       .replace('YYYY', year)
       .replace('MM', month)
@@ -28,6 +28,41 @@ const TimeUtils = {
       .replace('HH', hour)
       .replace('mm', minute)
       .replace('ss', second)
+  },
+
+  /**
+   * 格式化训练时间显示（统一格式）
+   * @param {Date|string} dateTime 日期时间
+   * @returns {string} 格式化后的时间字符串
+   */
+  formatEventTime(dateTime) {
+    const date = new Date(dateTime)
+    if (isNaN(date.getTime())) return '无效时间'
+
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+
+    return `${month}月${day}日 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+  },
+
+  /**
+   * 格式化训练详情时间显示（完整格式）
+   * @param {Date|string} dateTime 日期时间
+   * @returns {string} 格式化后的时间字符串
+   */
+  formatEventDetailTime(dateTime) {
+    const date = new Date(dateTime)
+    if (isNaN(date.getTime())) return '无效时间'
+
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+
+    return `${year}年${month}月${day}日 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
   },
 
   /**

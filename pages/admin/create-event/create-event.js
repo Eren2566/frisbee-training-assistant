@@ -110,7 +110,11 @@ Page({
 
   // 更新日期时间显示
   updateDateTime(date, time) {
-    const eventTime = `${date} ${time}`
+    // 创建本地时间对象，确保时区正确
+    const localDateTime = new Date(`${date}T${time}:00`)
+
+    // 使用本地时间字符串格式，避免时区转换问题
+    const eventTime = `${date} ${time}:00`
     const formattedDateTime = this.formatDateTime(date, time)
 
     this.setData({

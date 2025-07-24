@@ -2,6 +2,7 @@
 const app = getApp()
 const { getUserDisplayName, getUserRoleText } = require('../../utils/userUtils.js')
 const { eventService, registrationService } = require('../../services/api.js')
+const { TimeUtils } = require('../../utils/common.js')
 
 Page({
   data: {
@@ -81,7 +82,7 @@ Page({
         // 格式化时间用于显示
         const formattedEvent = {
           ...nextEvent,
-          eventTime: this.formatDateTime(nextEvent.eventTime)
+          eventTime: TimeUtils.formatEventTime(nextEvent.eventTime)
         }
 
         this.setData({

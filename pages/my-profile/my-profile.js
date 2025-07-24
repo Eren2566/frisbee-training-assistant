@@ -1,5 +1,6 @@
 // pages/my-profile/my-profile.js
 const app = getApp()
+const { TimeUtils } = require('../../utils/common.js')
 
 Page({
   data: {
@@ -189,13 +190,7 @@ Page({
 
   // 格式化时间
   formatTime(timeStr) {
-    const date = new Date(timeStr)
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const hour = date.getHours()
-    const minute = date.getMinutes()
-    
-    return `${month}月${day}日 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+    return TimeUtils.formatEventTime(timeStr)
   },
 
   // 跳转到开发工具

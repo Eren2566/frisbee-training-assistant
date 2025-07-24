@@ -58,11 +58,34 @@ async function createEvent(event, wxContext) {
     }
 
     // 创建训练活动
+    // 确保eventTime是正确的Date对象，处理本地时间字符串
+    let parsedEventTime
+    if (typeof eventTime === 'string') {
+      // 如果是本地时间格式 "YYYY-MM-DD HH:mm:ss"，需要明确指定为本地时间
+      if (eventTime.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)) {
+        // 将本地时间字符串转换为ISO格式，添加时区信息
+        const isoString = eventTime.replace(' ', 'T') + '+08:00'
+        parsedEventTime = new Date(isoString)
+      } else {
+        parsedEventTime = new Date(eventTime)
+      }
+    } else {
+      parsedEventTime = new Date(eventTime)
+    }
+
+    // 验证时间是否有效
+    if (isNaN(parsedEventTime.getTime())) {
+      return {
+        success: false,
+        message: '无效的训练时间'
+      }
+    }
+
     const createResult = await db.collection('Events').add({
       data: {
         creatorId: openid,
         title,
-        eventTime: new Date(eventTime),
+        eventTime: parsedEventTime,
         location,
         content,
         notes: notes || '',

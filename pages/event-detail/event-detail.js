@@ -1,5 +1,6 @@
 // pages/event-detail/event-detail.js
 const app = getApp()
+const { TimeUtils } = require('../../utils/common.js')
 
 Page({
   data: {
@@ -88,7 +89,7 @@ Page({
         if (res.result.success) {
           const eventDetail = {
             ...res.result.data,
-            formattedTime: this.formatTime(res.result.data.eventTime)
+            formattedTime: TimeUtils.formatEventDetailTime(res.result.data.eventTime)
           }
 
           this.setData({

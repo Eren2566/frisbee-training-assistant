@@ -1,5 +1,6 @@
 // pages/event-list/event-list.js
 const app = getApp()
+const { TimeUtils } = require('../../utils/common.js')
 
 Page({
   data: {
@@ -62,7 +63,7 @@ Page({
           // 格式化时间显示
           const eventList = res.result.data.map(event => ({
             ...event,
-            formattedTime: this.formatTime(event.eventTime)
+            formattedTime: TimeUtils.formatEventTime(event.eventTime)
           }))
 
           this.setData({
