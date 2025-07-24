@@ -598,6 +598,13 @@
   margin-bottom: var(--spacing-md);
 }
 
+.status-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
 .event-title {
   font-size: 32rpx;
   font-weight: 700;
@@ -633,6 +640,154 @@
 .status-badge.absent {
   background-color: #ffebee;
   color: #d32f2f;
+}
+
+/* 打卡按钮样式 */
+.check-in-button-container {
+  margin-top: var(--spacing-xs);
+  width: fit-content;
+  min-width: 120rpx; /* 稍微大于"已报名"状态的宽度 */
+}
+
+.check-in-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  padding: 10rpx 16rpx; /* 减小内边距 */
+  background: linear-gradient(135deg, #00C851 0%, #007E33 50%, #00C851 100%); /* 增强渐变对比度 */
+  color: white;
+  border: none;
+  border-radius: 40rpx; /* 稍微减小圆角 */
+  font-size: 22rpx; /* 稍微减小字体 */
+  font-weight: 600;
+  box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 100rpx; /* 设置最小宽度 */
+  animation: checkInBreathing 2.5s ease-in-out infinite, checkInRipple 3s ease-in-out infinite;
+}
+
+.check-in-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: checkInWaveRipple 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.check-in-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.check-in-button:active::after {
+  left: 100%;
+}
+
+.check-in-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2rpx 12rpx rgba(0, 200, 81, 0.6);
+}
+
+.check-in-icon {
+  font-size: 24rpx; /* 减小图标尺寸 */
+  font-weight: bold;
+  line-height: 1;
+}
+
+.check-in-text {
+  font-size: 22rpx; /* 减小文字尺寸 */
+  font-weight: 600;
+}
+
+/* 打卡中状态样式 */
+.check-in-button.checking-in {
+  background: linear-gradient(135deg, #9E9E9E 0%, #616161 50%, #9E9E9E 100%);
+  box-shadow: 0 4rpx 12rpx rgba(158, 158, 158, 0.3);
+  animation: checkInLoadingPulse 1.5s ease-in-out infinite;
+  cursor: not-allowed;
+}
+
+.check-in-button[disabled] {
+  opacity: 0.7;
+  transform: none !important;
+}
+
+/* 打卡按钮呼吸动画 */
+@keyframes checkInBreathing {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6rpx 24rpx rgba(0, 200, 81, 0.6), 0 0 0 4rpx rgba(0, 200, 81, 0.2);
+  }
+}
+
+/* 打卡按钮波纹动画 */
+@keyframes checkInRipple {
+  0% {
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0.3);
+  }
+  25% {
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 8rpx rgba(0, 200, 81, 0.2);
+  }
+  50% {
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 16rpx rgba(0, 200, 81, 0.1);
+  }
+  75% {
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 24rpx rgba(0, 200, 81, 0.05);
+  }
+  100% {
+    box-shadow: 0 4rpx 16rpx rgba(0, 200, 81, 0.4), 0 0 0 0 rgba(0, 200, 81, 0);
+  }
+}
+
+/* 打卡中加载动画 */
+@keyframes checkInLoadingPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* 波纹扩散动画 */
+@keyframes checkInWaveRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  50% {
+    width: 120rpx;
+    height: 120rpx;
+    opacity: 0.3;
+  }
+  100% {
+    width: 160rpx;
+    height: 160rpx;
+    opacity: 0;
+  }
 }
 
 .registration-info {
@@ -779,5 +934,37 @@
     padding: 24rpx;
     font-size: 30rpx;
     min-height: 88rpx;
+  }
+
+  /* 小屏幕下的打卡按钮优化 */
+  .check-in-button {
+    padding: 8rpx 14rpx;
+    font-size: 20rpx;
+    min-width: 90rpx;
+  }
+
+  .check-in-icon {
+    font-size: 22rpx;
+  }
+
+  .check-in-text {
+    font-size: 20rpx;
+  }
+}
+
+/* 大屏幕优化 */
+@media (min-width: 1200rpx) {
+  .check-in-button {
+    padding: 12rpx 18rpx;
+    font-size: 24rpx;
+    min-width: 110rpx;
+  }
+
+  .check-in-icon {
+    font-size: 26rpx;
+  }
+
+  .check-in-text {
+    font-size: 24rpx;
   }
 }

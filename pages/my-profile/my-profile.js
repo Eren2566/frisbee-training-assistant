@@ -8,6 +8,7 @@ Page({
     isLoggedIn: false,
     myRegistrations: [],
     isLoading: false,
+    isCheckingIn: false, // 打卡状态
     displayAvatarUrl: '',
     isUploadingAvatar: false,
     // 盘名修改相关
@@ -87,13 +88,15 @@ Page({
         
         if (res.result.success) {
           const registrations = res.result.data
-          // 格式化时间显示
+          // 格式化时间显示并添加打卡状态判断
           const formattedRegistrations = registrations.map(registration => ({
             ...registration,
             eventInfo: {
               ...registration.eventInfo,
               formattedTime: this.formatTime(registration.eventInfo.eventTime)
-            }
+            },
+            // 判断是否可以打卡：状态为已报名且当前时间超过训练时间1小时
+            canCheckIn: registration.status === 'signed_up' && this.canCheckIn(registration.eventInfo.eventTime)
           }))
 
           this.setData({
@@ -138,6 +141,84 @@ Page({
         attendanceRate
       }
     })
+  },
+
+  // 判断是否可以打卡（训练时间过后1小时内可以打卡）
+  canCheckIn(eventTime) {
+    const now = new Date()
+    const trainingTime = new Date(eventTime)
+    const oneHourAfterTraining = new Date(trainingTime.getTime() + 60 * 60 * 1000) // 训练时间 + 1小时
+
+    // 当前时间超过训练时间1小时后才能打卡
+    return now >= oneHourAfterTraining
+  },
+
+  // 用户自助打卡
+  handleCheckIn(e) {
+    const registrationId = e.currentTarget.dataset.registrationId
+    const eventTitle = e.currentTarget.dataset.eventTitle
+
+    // 防止重复点击
+    if (this.data.isCheckingIn) {
+      return
+    }
+
+    wx.showModal({
+      title: '确认打卡',
+      content: `确认参加了"${eventTitle}"的训练吗？`,
+      confirmText: '确认打卡',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          this.performCheckIn(registrationId)
+        }
+      }
+    })
+  },
+
+  // 执行打卡操作
+  performCheckIn(registrationId) {
+    this.setData({
+      isCheckingIn: true
+    })
+
+    wx.showLoading({ title: '打卡中...' })
+
+    wx.cloud.callFunction({
+      name: 'registration_service',
+      data: {
+        action: 'checkIn',
+        registrationId: registrationId
+      },
+      success: (res) => {
+        if (res.result.success) {
+          wx.showToast({
+            title: '打卡成功！',
+            icon: 'success',
+            duration: 2000
+          })
+          // 重新加载数据
+          this.loadMyRegistrations()
+        } else {
+          app.showError(res.result.message || '打卡失败')
+        }
+      },
+      fail: (err) => {
+        console.error('打卡失败:', err)
+        app.showError('网络错误，打卡失败')
+      },
+      complete: () => {
+        wx.hideLoading()
+        this.setData({
+          isCheckingIn: false
+        })
+      }
+    })
+  },
+
+  // 阻止事件冒泡
+  stopPropagation(e) {
+    // 阻止事件冒泡，防止触发父元素的点击事件
   },
 
   // 跳转到训练详情

@@ -24,6 +24,8 @@ exports.main = async (event, context) => {
         return await updateAttendance(event, wxContext)
       case 'getUserStatus':
         return await getUserEventStatus(event, wxContext)
+      case 'checkIn':
+        return await userCheckIn(event, wxContext)
       default:
         return {
           success: false,
@@ -159,6 +161,7 @@ async function getMyRegistrationList(event, wxContext) {
     }).get()
 
     // 合并数据，只保留训练信息存在的记录（即未删除的训练）
+    // 同时过滤掉状态为 'leave_requested' 的记录，只显示已报名和已出勤的记录
     const myList = result.data
       .map(registration => {
         const eventInfo = eventResult.data.find(e => e._id === registration.eventId)
@@ -168,6 +171,7 @@ async function getMyRegistrationList(event, wxContext) {
         }
       })
       .filter(item => item.eventInfo) // 过滤掉训练信息不存在的记录（已删除的训练）
+      .filter(item => item.status === 'signed_up' || item.status === 'present') // 只显示已报名和已出勤的记录
 
     return {
       success: true,
@@ -246,6 +250,84 @@ async function getUserEventStatus(event, wxContext) {
     return {
       success: false,
       message: '获取用户状态失败',
+      error: error.message
+    }
+  }
+}
+
+// 用户自助打卡
+async function userCheckIn(event, wxContext) {
+  const { registrationId } = event
+  const openid = wxContext.OPENID
+
+  try {
+    // 验证报名记录是否存在且属于当前用户
+    const registrationResult = await db.collection('Registrations').doc(registrationId).get()
+
+    if (!registrationResult.data) {
+      return {
+        success: false,
+        message: '报名记录不存在'
+      }
+    }
+
+    const registration = registrationResult.data
+
+    // 验证是否为当前用户的记录
+    if (registration.userId !== openid) {
+      return {
+        success: false,
+        message: '无权限操作此记录'
+      }
+    }
+
+    // 验证当前状态是否为已报名
+    if (registration.status !== 'signed_up') {
+      return {
+        success: false,
+        message: '只有已报名状态才能打卡'
+      }
+    }
+
+    // 获取训练信息验证时间
+    const eventResult = await db.collection('Events').doc(registration.eventId).get()
+    if (!eventResult.data) {
+      return {
+        success: false,
+        message: '训练信息不存在'
+      }
+    }
+
+    const eventInfo = eventResult.data
+    const now = new Date()
+    const trainingTime = new Date(eventInfo.eventTime)
+    const oneHourAfterTraining = new Date(trainingTime.getTime() + 60 * 60 * 1000)
+
+    // 验证是否在允许打卡的时间范围内（训练时间1小时后）
+    if (now < oneHourAfterTraining) {
+      return {
+        success: false,
+        message: '训练结束1小时后才能打卡'
+      }
+    }
+
+    // 更新状态为已出勤
+    await db.collection('Registrations').doc(registrationId).update({
+      data: {
+        status: 'present',
+        updateTime: new Date()
+      }
+    })
+
+    return {
+      success: true,
+      message: '打卡成功'
+    }
+  } catch (error) {
+    console.error('用户打卡失败:', error)
+    return {
+      success: false,
+      message: '打卡失败',
       error: error.message
     }
   }

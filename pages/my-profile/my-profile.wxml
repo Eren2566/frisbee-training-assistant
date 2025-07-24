@@ -112,8 +112,21 @@
           
           <view class="registration-header">
             <text class="event-title">{{item.eventInfo.title}}</text>
-            <view class="status-badge {{item.status}}">
-              <text>{{item.status === 'signed_up' ? '已报名' : item.status === 'leave_requested' ? '已请假' : item.status === 'present' ? '已出勤' : item.status === 'absent' ? '缺勤' : '未知'}}</text>
+            <view class="status-section">
+              <view class="status-badge {{item.status}}">
+                <text>{{item.status === 'signed_up' ? '已报名' : '已出勤'}}</text>
+              </view>
+              <!-- 打卡按钮 -->
+              <view class="check-in-button-container" wx:if="{{item.canCheckIn}}" catchtap="stopPropagation">
+                <button class="check-in-button {{isCheckingIn ? 'checking-in' : ''}}"
+                        bindtap="handleCheckIn"
+                        data-registration-id="{{item._id}}"
+                        data-event-title="{{item.eventInfo.title}}"
+                        disabled="{{isCheckingIn}}">
+                  <view class="check-in-icon">{{isCheckingIn ? '⏳' : '✓'}}</view>
+                  <text class="check-in-text">{{isCheckingIn ? '打卡中...' : '打卡'}}</text>
+                </button>
+              </view>
             </view>
           </view>
 
