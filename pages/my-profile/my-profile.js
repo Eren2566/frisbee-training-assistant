@@ -124,9 +124,12 @@ Page({
 
   // 计算统计数据
   calculateStats(registrations) {
-    const totalEvents = registrations.length
+    // 只统计状态为 'signed_up' 的记录作为报名训练数
+    const totalEvents = registrations.filter(item => item.status === 'signed_up').length
     const attendedEvents = registrations.filter(item => item.status === 'present').length
-    const attendanceRate = totalEvents > 0 ? Math.round((attendedEvents / totalEvents) * 100) : 0
+    // 出勤率基于所有有效记录（排除请假）计算
+    const validRegistrations = registrations.filter(item => item.status !== 'leave_requested').length
+    const attendanceRate = validRegistrations > 0 ? Math.round((attendedEvents / validRegistrations) * 100) : 0
 
     this.setData({
       stats: {

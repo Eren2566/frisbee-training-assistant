@@ -73,7 +73,7 @@
       <view class="stats-grid">
         <view class="stat-item">
           <text class="stat-number">{{stats.totalEvents}}</text>
-          <text class="stat-label">参与训练</text>
+          <text class="stat-label">报名训练</text>
         </view>
         <view class="stat-item">
           <text class="stat-number">{{stats.attendedEvents}}</text>
@@ -99,7 +99,7 @@
       <view class="empty-state" wx:elif="{{myRegistrations.length === 0}}">
         <view class="empty-icon">📅</view>
         <text class="empty-text">暂无训练记录</text>
-        <text class="empty-desc">参加训练后这里会显示您的出勤记录</text>
+        <text class="empty-desc">报名训练后这里会显示您的出勤记录</text>
       </view>
 
       <!-- 记录列表 -->
