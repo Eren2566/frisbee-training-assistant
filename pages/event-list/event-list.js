@@ -11,7 +11,7 @@ Page({
     userInfo: null,
     isAdmin: false,
     // 筛选器状态
-    statusFilter: 'active', // 'active', 'registering', 'ongoing', 'finished', 'all'
+    statusFilter: 'all', // 'registering', 'ongoing', 'finished', 'all'
     sortOrder: 'asc' // 'asc', 'desc'
   },
 
@@ -156,7 +156,7 @@ Page({
       const savedSortOrder = wx.getStorageSync('eventList_sortOrder')
 
       this.setData({
-        statusFilter: savedStatusFilter || 'active',
+        statusFilter: savedStatusFilter || 'all',
         sortOrder: savedSortOrder || 'asc'
       })
     } catch (error) {
@@ -216,17 +216,10 @@ Page({
 
     // 状态筛选
     if (this.data.statusFilter !== 'all') {
-      if (this.data.statusFilter === 'active') {
-        // 活跃中：包括报名中和进行中
-        filteredList = filteredList.filter(event =>
-          event.status === 'registering' || event.status === 'ongoing'
-        )
-      } else {
-        // 特定状态筛选
-        filteredList = filteredList.filter(event =>
-          event.status === this.data.statusFilter
-        )
-      }
+      // 特定状态筛选
+      filteredList = filteredList.filter(event =>
+        event.status === this.data.statusFilter
+      )
     }
 
     // 时间排序

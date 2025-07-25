@@ -15,12 +15,6 @@
       <view class="filter-group">
         <text class="filter-label">状态</text>
         <view class="filter-options">
-          <view class="filter-option {{statusFilter === 'active' ? 'active' : ''}}"
-                bindtap="onStatusFilterChange"
-                data-status="active">
-            <text class="option-text">活跃中</text>
-            <view class="option-indicator"></view>
-          </view>
           <view class="filter-option {{statusFilter === 'registering' ? 'active' : ''}}"
                 bindtap="onStatusFilterChange"
                 data-status="registering">
