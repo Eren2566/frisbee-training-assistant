@@ -49,6 +49,31 @@ async function registerForEvent(event, wxContext) {
   const openid = testUserId || wxContext.OPENID
 
   try {
+    // 首先检查训练状态
+    const eventResult = await db.collection('Events').doc(eventId).get()
+    if (!eventResult.data) {
+      return {
+        success: false,
+        message: '训练不存在'
+      }
+    }
+
+    const eventData = eventResult.data
+    const now = new Date()
+    const eventTime = new Date(eventData.eventTime)
+    const trainingEndTime = new Date(eventTime.getTime() + 3 * 60 * 60 * 1000) // 训练时间 + 3小时
+
+    // 检查训练状态，如果是进行中则阻止报名和请假
+    if (eventData.status === 'ongoing' || (eventTime <= now && now < trainingEndTime)) {
+      const message = status === 'signed_up' ?
+        '训练开始啦，下次记得提前报名哦' :
+        '训练已经开始啦！'
+      return {
+        success: false,
+        message: message
+      }
+    }
+
     // 检查是否已经有记录
     const existingResult = await db.collection('Registrations').where({
       eventId,

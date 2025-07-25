@@ -32,6 +32,11 @@
   color: #1AAD19;
 }
 
+.status-badge.ongoing {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
 .status-badge.finished {
   background-color: #f5f5f5;
   color: #666;

@@ -48,6 +48,7 @@ const AppConfig = {
     // 活动状态
     event: {
       registering: 'registering',
+      ongoing: 'ongoing',
       finished: 'finished'
     },
     // 报名状态

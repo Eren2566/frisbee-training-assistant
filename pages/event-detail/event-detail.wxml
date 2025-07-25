@@ -6,7 +6,7 @@
     <view class="event-header">
       <text class="event-title">{{eventDetail.title}}</text>
       <view class="event-status {{eventDetail.status}}">
-        <text>{{eventDetail.status === 'registering' ? '报名中' : '已结束'}}</text>
+        <text>{{eventDetail.status === 'registering' ? '报名中' : eventDetail.status === 'ongoing' ? '进行中' : '已结束'}}</text>
       </view>
     </view>
 

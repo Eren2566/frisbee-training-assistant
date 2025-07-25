@@ -69,7 +69,7 @@
     <view class="training-card" wx:elif="{{nextEvent}}">
       <view class="training-header">
         <view class="training-icon">🏃</view>
-        <text class="training-title">下次训练</text>
+        <text class="training-title">{{nextEvent.status === 'ongoing' ? '训练进行中' : '下次训练'}}</text>
       </view>
 
       <view class="training-info">
@@ -97,7 +97,7 @@
       <!-- 倒计时 -->
       <view class="countdown-section" wx:if="{{countdownText}}">
         <view class="countdown-icon">⏰</view>
-        <text class="countdown-text">倒计时：{{countdownText}}</text>
+        <text class="countdown-text">{{nextEvent.status === 'ongoing' ? '大家快来训练啦！' : '倒计时：' + countdownText}}</text>
       </view>
 
       <!-- 操作按钮 -->

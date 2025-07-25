@@ -127,19 +127,30 @@ async function getEventList(event, wxContext) {
       .orderBy('eventTime', 'desc')
       .get()
 
-    // 检查并更新过期训练的状态
+    // 检查并更新训练状态
     const now = new Date()
     const updatedEvents = []
 
     for (const eventItem of result.data) {
       const eventTime = new Date(eventItem.eventTime)
+      const trainingEndTime = new Date(eventTime.getTime() + 3 * 60 * 60 * 1000) // 训练时间 + 3小时
+      let newStatus = eventItem.status
 
-      // 如果训练时间已过且状态仍为报名中，则更新为已结束
-      if (eventTime < now && eventItem.status === 'registering') {
+      // 状态转换逻辑：报名中 -> 进行中 -> 已结束
+      if (eventItem.status === 'registering' && eventTime <= now && now < trainingEndTime) {
+        // 训练开始，状态从报名中变为进行中
+        newStatus = 'ongoing'
+      } else if ((eventItem.status === 'registering' || eventItem.status === 'ongoing') && now >= trainingEndTime) {
+        // 训练结束，状态变为已结束
+        newStatus = 'finished'
+      }
+
+      // 如果状态需要更新
+      if (newStatus !== eventItem.status) {
         try {
           await db.collection('Events').doc(eventItem._id).update({
             data: {
-              status: 'finished',
+              status: newStatus,
               updateTime: new Date()
             }
           })
@@ -147,7 +158,7 @@ async function getEventList(event, wxContext) {
           // 更新返回数据中的状态
           updatedEvents.push({
             ...eventItem,
-            status: 'finished',
+            status: newStatus,
             updateTime: new Date()
           })
         } catch (updateError) {
@@ -191,15 +202,27 @@ async function getEventDetail(event, wxContext) {
 
     let eventData = result.data
 
-    // 检查并更新过期训练的状态
+    // 检查并更新训练状态
     const now = new Date()
     const eventTime = new Date(eventData.eventTime)
+    const trainingEndTime = new Date(eventTime.getTime() + 3 * 60 * 60 * 1000) // 训练时间 + 3小时
+    let newStatus = eventData.status
 
-    if (eventTime < now && eventData.status === 'registering') {
+    // 状态转换逻辑：报名中 -> 进行中 -> 已结束
+    if (eventData.status === 'registering' && eventTime <= now && now < trainingEndTime) {
+      // 训练开始，状态从报名中变为进行中
+      newStatus = 'ongoing'
+    } else if ((eventData.status === 'registering' || eventData.status === 'ongoing') && now >= trainingEndTime) {
+      // 训练结束，状态变为已结束
+      newStatus = 'finished'
+    }
+
+    // 如果状态需要更新
+    if (newStatus !== eventData.status) {
       try {
         await db.collection('Events').doc(eventId).update({
           data: {
-            status: 'finished',
+            status: newStatus,
             updateTime: new Date()
           }
         })
@@ -207,7 +230,7 @@ async function getEventDetail(event, wxContext) {
         // 更新返回数据中的状态
         eventData = {
           ...eventData,
-          status: 'finished',
+          status: newStatus,
           updateTime: new Date()
         }
       } catch (updateError) {

@@ -306,6 +306,7 @@ const StatusUtils = {
   // 活动状态映射
   eventStatus: {
     'registering': { text: '报名中', class: 'registering', color: '#1AAD19' },
+    'ongoing': { text: '进行中', class: 'ongoing', color: '#ff9800' },
     'finished': { text: '已结束', class: 'finished', color: '#666' }
   },
 

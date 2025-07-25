@@ -183,6 +183,21 @@ Page({
 
     if (this.data.isRegistering) return
 
+    // 检查训练状态，如果是进行中则阻止报名和请假
+    if (this.data.eventDetail && this.data.eventDetail.status === 'ongoing') {
+      const message = status === 'signed_up' ?
+        '训练开始啦，下次记得提前报名哦' :
+        '训练已经开始啦！'
+
+      wx.showModal({
+        title: '提示',
+        content: message,
+        showCancel: false,
+        confirmText: '知道了'
+      })
+      return
+    }
+
     this.setData({
       isRegistering: true
     })

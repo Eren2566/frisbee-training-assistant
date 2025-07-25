@@ -8,10 +8,73 @@
     </button>
   </view>
 
+  <!-- 筛选器区域 -->
+  <view class="filter-container">
+    <view class="filter-section">
+      <!-- 状态筛选器 -->
+      <view class="filter-group">
+        <text class="filter-label">状态</text>
+        <view class="filter-options">
+          <view class="filter-option {{statusFilter === 'registering' ? 'active' : ''}}"
+                bindtap="onStatusFilterChange"
+                data-status="registering">
+            <text class="option-text">报名中</text>
+            <view class="option-indicator"></view>
+          </view>
+          <view class="filter-option {{statusFilter === 'ongoing' ? 'active' : ''}}"
+                bindtap="onStatusFilterChange"
+                data-status="ongoing">
+            <text class="option-text">进行中</text>
+            <view class="option-indicator"></view>
+          </view>
+          <view class="filter-option {{statusFilter === 'finished' ? 'active' : ''}}"
+                bindtap="onStatusFilterChange"
+                data-status="finished">
+            <text class="option-text">已结束</text>
+            <view class="option-indicator"></view>
+          </view>
+          <view class="filter-option {{statusFilter === 'all' ? 'active' : ''}}"
+                bindtap="onStatusFilterChange"
+                data-status="all">
+            <text class="option-text">全部</text>
+            <view class="option-indicator"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 时间排序器 -->
+      <view class="filter-group">
+        <text class="filter-label">排序</text>
+        <view class="sort-options">
+          <view class="sort-option {{sortOrder === 'asc' ? 'active' : ''}}"
+                bindtap="onSortOrderChange"
+                data-order="asc">
+            <text class="sort-icon">↑</text>
+            <text class="option-text">时间正序</text>
+            <view class="option-indicator"></view>
+          </view>
+          <view class="sort-option {{sortOrder === 'desc' ? 'active' : ''}}"
+                bindtap="onSortOrderChange"
+                data-order="desc">
+            <text class="sort-icon">↓</text>
+            <text class="option-text">时间倒序</text>
+            <view class="option-indicator"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 筛选结果统计 -->
+    <view class="filter-stats" wx:if="{{!isLoading}}">
+      <text class="stats-text">共找到 {{filteredEventList.length}} 个训练</text>
+      <view class="stats-indicator {{isFiltering ? 'loading' : ''}}"></view>
+    </view>
+  </view>
+
   <!-- 训练列表 -->
   <view class="event-list" wx:if="{{!isLoading}}">
     <!-- 空状态 -->
-    <view class="empty-state-enhanced" wx:if="{{eventList.length === 0}}">
+    <view class="empty-state-enhanced" wx:if="{{filteredEventList.length === 0 && eventList.length === 0}}">
       <view class="empty-state-icon icon icon-calendar icon-gradient"></view>
       <text class="empty-text">暂无训练安排</text>
       <text class="empty-desc">开始创建您的第一个训练计划吧！</text>
@@ -20,9 +83,19 @@
       </button>
     </view>
 
+    <!-- 筛选结果为空 -->
+    <view class="empty-state-enhanced" wx:elif="{{filteredEventList.length === 0 && eventList.length > 0}}">
+      <view class="empty-state-icon icon icon-search icon-gradient"></view>
+      <text class="empty-text">没有符合条件的训练</text>
+      <text class="empty-desc">尝试调整筛选条件查看更多训练</text>
+      <button class="btn-secondary btn-click mobile-bounce-in delay-200 touch-optimized gpu-accelerated" bindtap="resetFilters">
+        重置筛选
+      </button>
+    </view>
+
     <!-- 训练卡片列表 -->
     <view class="event-item card card-touch card-highlight mobile-slide-right gpu-accelerated touch-optimized"
-          wx:for="{{eventList}}"
+          wx:for="{{filteredEventList}}"
           wx:key="_id"
           bindtap="goToEventDetail"
           data-id="{{item._id}}"
@@ -32,7 +105,7 @@
       <view class="event-header">
         <text class="event-title">{{item.title}}</text>
         <view class="event-status {{item.status}}">
-          <text>{{item.status === 'registering' ? '报名中' : '已结束'}}</text>
+          <text>{{item.status === 'registering' ? '报名中' : item.status === 'ongoing' ? '进行中' : '已结束'}}</text>
         </view>
       </view>
 

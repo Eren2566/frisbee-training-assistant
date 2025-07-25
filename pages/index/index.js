@@ -58,16 +58,21 @@ Page({
       // 获取训练列表
       const events = await eventService.getEventList()
 
-      // 找到下一次训练（未来的训练且状态为报名中）
+      // 找到下一次训练（状态为报名中或进行中的训练）
       const now = new Date()
-      const futureEvents = events.filter(event =>
-        new Date(event.eventTime) > now && event.status === 'registering'
-      )
+      const activeEvents = events.filter(event => {
+        const eventTime = new Date(event.eventTime)
+        const trainingEndTime = new Date(eventTime.getTime() + 3 * 60 * 60 * 1000) // 训练时间 + 3小时
 
-      if (futureEvents.length > 0) {
+        // 显示报名中的训练，或者正在进行中的训练
+        return (event.status === 'registering' && eventTime > now) ||
+               (event.status === 'ongoing' && now < trainingEndTime)
+      })
+
+      if (activeEvents.length > 0) {
         // 按时间排序，取最近的一次
-        futureEvents.sort((a, b) => new Date(a.eventTime) - new Date(b.eventTime))
-        const nextEvent = futureEvents[0]
+        activeEvents.sort((a, b) => new Date(a.eventTime) - new Date(b.eventTime))
+        const nextEvent = activeEvents[0]
 
         // 获取报名列表
         const registrations = await registrationService.getRegistrationList(nextEvent._id)
@@ -133,9 +138,15 @@ Page({
       }
 
       const diff = eventTime - now
+      const trainingEndTime = new Date(eventTime.getTime() + 3 * 60 * 60 * 1000) // 训练时间 + 3小时
 
       if (diff <= 0) {
-        this.setData({ countdownText: '训练已开始' })
+        // 训练已开始，检查是否还在进行中
+        if (now < trainingEndTime) {
+          this.setData({ countdownText: '大家快来训练啦！' })
+        } else {
+          this.setData({ countdownText: '训练已结束' })
+        }
         return
       }
 
@@ -315,6 +326,17 @@ Page({
   async handleSignUp() {
     if (!this.data.nextEvent) return
 
+    // 检查训练状态，如果是进行中则阻止报名
+    if (this.data.nextEvent.status === 'ongoing') {
+      wx.showModal({
+        title: '提示',
+        content: '训练开始啦，下次记得提前报名哦',
+        showCancel: false,
+        confirmText: '知道了'
+      })
+      return
+    }
+
     try {
       wx.showLoading({ title: '报名中...' })
 
@@ -351,6 +373,17 @@ Page({
   // 申请请假
   async handleLeave() {
     if (!this.data.nextEvent) return
+
+    // 检查训练状态，如果是进行中则阻止请假
+    if (this.data.nextEvent.status === 'ongoing') {
+      wx.showModal({
+        title: '提示',
+        content: '训练已经开始啦！',
+        showCancel: false,
+        confirmText: '知道了'
+      })
+      return
+    }
 
     try {
       wx.showLoading({ title: '请假中...' })
