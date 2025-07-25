@@ -557,7 +557,7 @@ async function getUserManagement(options = {}) {
     // 获取用户活动统计
     const usersWithStats = await Promise.all(
       users.data.map(async (user) => {
-        // 只统计状态为 'signed_up' 的记录作为报名训练数
+        // 统计状态为 'signed_up' 的记录作为报名训练数
         const signedUpCount = await db.collection('Registrations').where({
           userId: user._openid,
           status: 'signed_up'
@@ -568,19 +568,16 @@ async function getUserManagement(options = {}) {
           status: 'present'
         }).count()
 
-        // 获取所有有效记录（排除请假）用于计算出勤率
-        const validRegistrationsCount = await db.collection('Registrations').where({
-          userId: user._openid,
-          status: db.command.neq('leave_requested')
-        }).count()
+        // 总报名训练次数 = 已报名 + 已出勤（因为出勤的记录原本也是报名的）
+        const totalRegistrations = signedUpCount.total + presentCount.total
 
         return {
           ...user,
           stats: {
-            totalRegistrations: signedUpCount.total,
+            totalRegistrations: totalRegistrations,
             presentCount: presentCount.total,
-            attendanceRate: validRegistrationsCount.total > 0 ?
-              Math.round((presentCount.total / validRegistrationsCount.total) * 100) : 0
+            attendanceRate: totalRegistrations > 0 ?
+              Math.round((presentCount.total / totalRegistrations) * 100) : 0
           }
         }
       })

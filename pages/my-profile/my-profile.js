@@ -127,12 +127,14 @@ Page({
 
   // 计算统计数据
   calculateStats(registrations) {
-    // 只统计状态为 'signed_up' 的记录作为报名训练数
-    const totalEvents = registrations.filter(item => item.status === 'signed_up').length
+    // 统计状态为 'signed_up' 的记录作为报名训练数
+    const signedUpEvents = registrations.filter(item => item.status === 'signed_up').length
+    // 统计状态为 'present' 的记录作为实际出勤数
     const attendedEvents = registrations.filter(item => item.status === 'present').length
-    // 出勤率基于所有有效记录（排除请假）计算
-    const validRegistrations = registrations.filter(item => item.status !== 'leave_requested').length
-    const attendanceRate = validRegistrations > 0 ? Math.round((attendedEvents / validRegistrations) * 100) : 0
+    // 总报名训练次数 = 已报名 + 已出勤（因为出勤的记录原本也是报名的）
+    const totalEvents = signedUpEvents + attendedEvents
+    // 出勤率 = 实际出勤次数 / 总报名训练次数
+    const attendanceRate = totalEvents > 0 ? Math.round((attendedEvents / totalEvents) * 100) : 0
 
     this.setData({
       stats: {
