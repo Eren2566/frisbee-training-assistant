@@ -32,7 +32,7 @@
       <view class="event-header">
         <text class="event-title">{{item.title}}</text>
         <view class="event-status {{item.status}}">
-          <text>{{item.status === 'registering' ? '报名中' : '已结束'}}</text>
+          <text>{{item.status === 'registering' ? '报名中' : item.status === 'ongoing' ? '进行中' : '已结束'}}</text>
         </view>
       </view>
 

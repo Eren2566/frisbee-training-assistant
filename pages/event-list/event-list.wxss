@@ -151,6 +151,11 @@
   color: white;
 }
 
+.event-status.ongoing {
+  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  color: white;
+}
+
 .event-status.finished {
   background: linear-gradient(135deg, var(--gray-400) 0%, var(--gray-500) 100%);
   color: white;

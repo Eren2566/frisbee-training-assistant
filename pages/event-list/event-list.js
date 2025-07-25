@@ -126,6 +126,7 @@ Page({
   getStatusText(status) {
     const statusMap = {
       'registering': '报名中',
+      'ongoing': '进行中',
       'finished': '已结束'
     }
     return statusMap[status] || '未知状态'

@@ -28,6 +28,7 @@ Component({
       // 活动状态配置
       event: {
         'registering': { text: '报名中', class: 'registering', color: '#1AAD19' },
+        'ongoing': { text: '进行中', class: 'ongoing', color: '#ff9800' },
         'finished': { text: '已结束', class: 'finished', color: '#666' }
       },
       // 报名状态配置
