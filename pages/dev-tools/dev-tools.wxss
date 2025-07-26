@@ -273,6 +273,11 @@
   color: #666;
 }
 
+.btn-warning {
+  background-color: #ff9800;
+  color: #fff;
+}
+
 .btn-small {
   padding: 12rpx 24rpx;
   font-size: 24rpx;

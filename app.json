@@ -7,7 +7,8 @@
     "pages/admin/create-event/create-event",
     "pages/my-profile/my-profile",
     "pages/deploy-check/deploy-check",
-    "pages/dev-tools/dev-tools"
+    "pages/dev-tools/dev-tools",
+    "pages/debug-time/debug-time"
   ],
   "window": {
     "backgroundTextStyle": "light",

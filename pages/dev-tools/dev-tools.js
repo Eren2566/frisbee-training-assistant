@@ -175,5 +175,12 @@ Page({
     wx.switchTab({
       url: '/pages/index/index'
     })
+  },
+
+  // 跳转到时间调试页面
+  goToDebugTime() {
+    wx.navigateTo({
+      url: '/pages/debug-time/debug-time'
+    })
   }
 })

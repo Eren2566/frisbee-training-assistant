@@ -1,0 +1,84 @@
+<!--pages/debug-time/debug-time.wxml-->
+<view class="page">
+  <view class="header">
+    <text class="title">时间格式化调试页面</text>
+    <text class="subtitle">用于调试真机和模拟器的时间处理差异</text>
+  </view>
+
+  <!-- 设备信息 -->
+  <view class="card">
+    <view class="card-title">设备信息</view>
+    <view class="info-item">
+      <text class="label">平台:</text>
+      <text class="value">{{deviceInfo.platform}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">系统:</text>
+      <text class="value">{{deviceInfo.system}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">版本:</text>
+      <text class="value">{{deviceInfo.version}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">SDK版本:</text>
+      <text class="value">{{deviceInfo.SDKVersion}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">品牌:</text>
+      <text class="value">{{deviceInfo.brand}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">型号:</text>
+      <text class="value">{{deviceInfo.model}}</text>
+    </view>
+  </view>
+
+  <!-- 测试结果 -->
+  <view class="card">
+    <view class="card-title">时间格式化测试结果</view>
+    
+    <view class="test-case" wx:for="{{testResults}}" wx:key="index">
+      <view class="test-header">
+        <text class="test-number">测试 {{item.index}}</text>
+      </view>
+      
+      <view class="test-content">
+        <view class="info-item">
+          <text class="label">输入:</text>
+          <text class="value">{{item.input}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">类型:</text>
+          <text class="value">{{item.inputType}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">Date有效:</text>
+          <text class="value {{item.dateValid ? 'success' : 'error'}}">{{item.dateValid ? '是' : '否'}}</text>
+        </view>
+        <view class="info-item" wx:if="{{item.formatEventTime}}">
+          <text class="label">formatEventTime:</text>
+          <text class="value">{{item.formatEventTime}}</text>
+        </view>
+        <view class="info-item" wx:if="{{item.formatEventDetailTime}}">
+          <text class="label">formatEventDetailTime:</text>
+          <text class="value">{{item.formatEventDetailTime}}</text>
+        </view>
+        <view class="info-item" wx:if="{{item.nativeFormat}}">
+          <text class="label">原生格式化:</text>
+          <text class="value">{{item.nativeFormat}}</text>
+        </view>
+        <view class="info-item" wx:if="{{item.error}}">
+          <text class="label">错误:</text>
+          <text class="value error">{{item.error}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="btn-primary" bindtap="testSpecificTime">测试特定时间</button>
+    <button class="btn-secondary" bindtap="copyDebugInfo">复制调试信息</button>
+  </view>
+</view>
