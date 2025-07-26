@@ -36,6 +36,8 @@
       <text class="notes-title">备注</text>
       <text class="notes-text">{{eventDetail.notes}}</text>
     </view>
+
+
   </view>
 
   <!-- 参训人员卡片 -->

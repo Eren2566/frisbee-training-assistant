@@ -1002,7 +1002,8 @@
   }
 }
 
-/* 深色模式适配（预留） */
+/* 深色模式适配（预留） - 暂时禁用以避免真机显示问题 */
+/*
 @media (prefers-color-scheme: dark) {
   .modal-content {
     background: #1a1a1a;
@@ -1026,3 +1027,4 @@
     color: #fff;
   }
 }
+*/

@@ -289,6 +289,8 @@ Page({
     return statusMap[status] || '未知状态'
   },
 
+
+
   // 检查删除权限
   checkDeletePermission(eventDetail) {
     const { userInfo } = this.data

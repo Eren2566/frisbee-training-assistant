@@ -239,6 +239,7 @@ async function getEventDetail(event, wxContext) {
       }
     }
 
+
     return {
       success: true,
       data: eventData,

@@ -28,6 +28,7 @@
     <view class="user-actions">
       <button class="btn btn-secondary" bindtap="logout" wx:if="{{currentUser}}">退出登录</button>
       <button class="btn btn-primary" bindtap="goHome">返回首页</button>
+      <button class="btn btn-warning" bindtap="goToDebugTime">时间调试</button>
     </view>
   </view>
 
