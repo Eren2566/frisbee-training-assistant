@@ -104,7 +104,7 @@
       <view class="action-buttons">
         <!-- 未报名用户显示报名按钮 -->
         <button class="btn-primary action-btn" wx:if="{{!userEventStatus}}" bindtap="handleSignUp">
-          立即报名
+          {{signUpButtonText}}
         </button>
 
         <!-- 已报名用户显示请假按钮 -->
@@ -114,7 +114,7 @@
 
         <!-- 已请假用户显示重新报名按钮 -->
         <button class="btn-primary action-btn" wx:elif="{{userEventStatus.status === 'leave_requested'}}" bindtap="handleSignUp">
-          重新报名
+          {{signUpButtonText}}
         </button>
 
         <!-- 查看详情按钮 -->

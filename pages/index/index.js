@@ -12,7 +12,8 @@ Page({
     userEventStatus: null,
     registrationCount: 0,
     countdownText: '',
-    isLoading: true
+    isLoading: true,
+    signUpButtonText: '立即报名' // 动态按钮文字
   },
 
   // 保存原始事件时间用于倒计时计算
@@ -96,6 +97,9 @@ Page({
           registrationCount: signedUpCount
         })
 
+        // 更新按钮文字
+        this.updateButtonText(userStatus)
+
         // 开始倒计时
         this.startCountdown()
       } else {
@@ -115,6 +119,20 @@ Page({
     } finally {
       this.setData({ isLoading: false })
     }
+  },
+
+  // 更新按钮文字逻辑
+  updateButtonText(userStatus) {
+    let signUpButtonText = '立即报名'
+
+    if (userStatus && userStatus.status === 'leave_requested') {
+      // 如果当前是请假状态，按钮显示"重新报名"
+      signUpButtonText = '重新报名'
+    }
+
+    this.setData({
+      signUpButtonText: signUpButtonText
+    })
   },
 
   // 开始倒计时
@@ -342,8 +360,11 @@ Page({
 
       await registrationService.register(this.data.nextEvent._id, 'signed_up')
 
+      // 显示成功消息
+      const message = this.data.userEventStatus && this.data.userEventStatus.status === 'leave_requested' ?
+        '重新报名成功' : '报名成功'
       wx.showToast({
-        title: '报名成功',
+        title: message,
         icon: 'success'
       })
 

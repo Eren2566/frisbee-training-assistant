@@ -72,7 +72,7 @@
   <!-- 用户操作区域 -->
   <view class="card user-actions" wx:if="{{!isAdmin && eventDetail && eventDetail.status === 'registering'}}">
     <text class="section-title">我的状态</text>
-    
+
     <!-- 用户当前状态显示 -->
     <view class="current-status" wx:if="{{userStatus}}">
       <text class="status-text">当前状态：</text>
@@ -81,24 +81,39 @@
       </view>
     </view>
 
-    <!-- 操作按钮 -->
-    <view class="action-buttons" wx:if="{{!userStatus}}">
-      <button 
-        class="btn-primary register-btn" 
+    <!-- 操作按钮区域 -->
+    <view class="action-buttons">
+      <!-- 未报名用户显示报名按钮 -->
+      <button
+        class="btn-primary action-btn btn-touch"
+        wx:if="{{!userStatus}}"
         bindtap="registerForEvent"
         data-status="signed_up"
         disabled="{{isRegistering}}"
       >
-        {{isRegistering ? '处理中...' : '我要报名'}}
+        {{isRegistering ? '处理中...' : signUpButtonText}}
       </button>
-      
-      <button 
-        class="btn-secondary leave-btn" 
+
+      <!-- 已报名用户显示请假按钮 -->
+      <button
+        class="btn-warning action-btn btn-touch"
+        wx:elif="{{userStatus && userStatus.status === 'signed_up'}}"
         bindtap="registerForEvent"
         data-status="leave_requested"
         disabled="{{isRegistering}}"
       >
-        {{isRegistering ? '处理中...' : '我要请假'}}
+        {{isRegistering ? '处理中...' : '申请请假'}}
+      </button>
+
+      <!-- 已请假用户显示重新报名按钮 -->
+      <button
+        class="btn-primary action-btn btn-touch"
+        wx:elif="{{userStatus && userStatus.status === 'leave_requested'}}"
+        bindtap="registerForEvent"
+        data-status="signed_up"
+        disabled="{{isRegistering}}"
+      >
+        {{isRegistering ? '处理中...' : signUpButtonText}}
       </button>
     </view>
   </view>

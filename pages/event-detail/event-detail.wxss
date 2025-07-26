@@ -189,13 +189,81 @@
   color: #d32f2f;
 }
 
+/* 操作按钮区域样式 */
 .action-buttons {
   display: flex;
-  gap: 20rpx;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
 }
 
-.register-btn, .leave-btn {
-  flex: 1;
+/* 操作按钮样式 */
+.action-btn {
+  min-width: 200rpx;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transform: translateZ(0);
+}
+
+/* 按钮点击动画效果 */
+.action-btn:active {
+  transform: scale(0.95) translateZ(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 按钮波纹效果 */
+.action-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+}
+
+.action-btn:active::after {
+  width: 300rpx;
+  height: 300rpx;
+}
+
+/* 按钮禁用状态 */
+.action-btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+  cursor: not-allowed;
+}
+
+.action-btn:disabled::after {
+  display: none;
+}
+
+/* 脉冲动画效果 */
+.action-btn:not(:disabled):hover {
+  animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+  0% {
+    box-shadow: var(--shadow-md), 0 0 0 0 rgba(255, 107, 53, 0.4);
+  }
+  70% {
+    box-shadow: var(--shadow-lg), 0 0 0 20rpx rgba(255, 107, 53, 0);
+  }
+  100% {
+    box-shadow: var(--shadow-md), 0 0 0 0 rgba(255, 107, 53, 0);
+  }
 }
 
 .admin-panel {

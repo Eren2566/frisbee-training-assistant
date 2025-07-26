@@ -24,7 +24,10 @@ Page({
     canDeleteEvent: false,
     showDeleteModal: false,
     deleteReason: '',
-    isDeleting: false
+    isDeleting: false,
+    // 按钮文字
+    signUpButtonText: '立即报名', // 动态按钮文字
+    hasEverSignedUp: false // 用户是否曾经报名过
   },
 
   onLoad(options) {
@@ -124,14 +127,38 @@ Page({
       data: requestData,
       success: (res) => {
         if (res.result.success) {
+          const userStatus = res.result.data
           this.setData({
-            userStatus: res.result.data
+            userStatus: userStatus
           })
+          // 更新按钮文字
+          this.updateButtonText(userStatus)
         }
       },
       fail: (err) => {
         console.error('获取用户状态失败:', err)
       }
+    })
+  },
+
+  // 更新按钮文字逻辑
+  updateButtonText(userStatus) {
+    let signUpButtonText = '立即报名'
+    let hasEverSignedUp = false
+
+    if (userStatus) {
+      // 如果用户曾经有过状态记录，说明曾经报名过
+      hasEverSignedUp = true
+
+      // 如果当前是请假状态，按钮显示"重新报名"
+      if (userStatus.status === 'leave_requested') {
+        signUpButtonText = '重新报名'
+      }
+    }
+
+    this.setData({
+      signUpButtonText: signUpButtonText,
+      hasEverSignedUp: hasEverSignedUp
     })
   },
 
@@ -218,7 +245,13 @@ Page({
       data: requestData,
       success: (res) => {
         if (res.result.success) {
-          app.showSuccess(res.result.message)
+          // 显示成功消息
+          const message = status === 'signed_up' ?
+            (this.data.userStatus && this.data.userStatus.status === 'leave_requested' ? '重新报名成功' : '报名成功') :
+            '请假成功'
+          app.showSuccess(message)
+
+          // 重新加载用户状态和报名列表
           this.loadUserStatus()
           if (this.data.isAdmin) {
             this.loadRegistrationList()
